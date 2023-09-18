@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Burgeon Lab - Where Projects Prosper</title><link>https://eclecticpassions.github.io/posts/</link><description>Recent content in Posts on Burgeon Lab - Where Projects Prosper</description><generator>Hugo -- gohugo.io</generator><language>en-GB</language><lastBuildDate>Sat, 16 Sep 2023 21:08:28 +0800</lastBuildDate><atom:link href="https://eclecticpassions.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Hello, Hugo</title><link>https://eclecticpassions.github.io/posts/hello-hugo/</link><pubDate>Sat, 16 Sep 2023 21:08:28 +0800</pubDate><guid>https://eclecticpassions.github.io/posts/hello-hugo/</guid><description>&lt;h2 id="learning-new-things">Learning New Things&lt;/h2>
+&lt;h3 id="background">Background&lt;/h3>
+&lt;p>Having grown up with Xanga, LiveJournal, Wordpress.com and Tumblr, then graduating to self-hosting Wordpress; using Hugo is a breath of fresh air in my blogging journey.&lt;/p>
+&lt;p>In 2023, I have been trying to wrap my head around GitHub and being more competent with CLI. At the same time, I learnt to customize the macOS terminal with &lt;a href="https://ohmyz.sh/">OMZ&lt;/a> and &lt;a href="https://github.com/romkatv/powerlevel10k">PowerLevel10k&lt;/a>, using nano to edit files, using &lt;a href="https://www.ssh.com/academy/ssh">SSH&lt;/a> with keys and &lt;a href="https://www.digitalocean.com/community/tutorials/how-to-use-rsync-to-sync-local-and-remote-directories">rsync&lt;/a>.&lt;/p>
+&lt;h3 id="my-current-setup">My current setup:&lt;/h3>
+&lt;ul>
+&lt;li>MacBook Air 13&amp;quot; (mid-2012) 2GHz Dual-Core i7, 8GB DDR3, 512GB running Catalina (10.15) in clamshell mode &lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>&lt;/li>
+&lt;li>OWLab Spring keyboard (my first Alice layout) with KTT Wine Red Linear Switches (44g actuation, 50g bottom out)&lt;/li>
+&lt;li>BenQ Zowie EC1-B mouse&lt;/li>
+&lt;li>Dell 24&amp;quot; U2415 60Hz display&lt;/li>
+&lt;/ul>
+&lt;p>Coming from someone without any coding background, I have to admit some of what I am learning are hard to grasp. But being a lifetime learner I am determined to get my projects executed!&lt;/p>
+&lt;h3 id="experimentation-with-linux">Experimentation with Linux&lt;/h3>
+&lt;p>My motivation to learn these new skills comes from the fact I want to setup a &lt;strong>homelab&lt;/strong> with a Raspberry Pi 4B 8GB rev 9 (which I have &lt;em>finally&lt;/em> acquired at retail price after the restock surge in Q3/Q4 2023).&lt;/p>
+&lt;p>During the time I was waiting for the restock, I have been messing around with Linux on two old PCs from the early 2010s; a HP Slimline desktop with stock Debian 12 bookworm and a HP Mini 210-1100 netbook with the super lightweight Debian-based distro — &lt;a href="https://antixlinux.com/">antiX&lt;/a>.&lt;/p>
+&lt;p>I learnt how to use Gparted, configure basic network configs and how window managers worked. In the end, I was able to successfully self-host Navidrome and it was exhilarating to say the least!&lt;/p>
+&lt;h3 id="raspberry-pi">Raspberry Pi&lt;/h3>
+&lt;p>During this newfound fascination with Linux, I unboxed a brand new &lt;strong>&lt;a href="https://www.raspberrypi.com/news/model-b-now-ships-with-512mb-of-ram/">Raspberry Pi Model B Rev 2 (512MB ram)&lt;/a>&lt;/strong> I bought 11 years ago in 2012! I found it earlier this month while unpacking old moving boxes I have in storage. It is running headless with the latest Raspberry Pi Lite in 32-bit. I installed Pi-Hole, feeling quite pleased with how it turned out! It is indeed a great first project for those starting out with the Raspberry Pi. The guides online were plentiful and relatively straightforward. SSH connection is via my MacBook Air or iPad Mini 6 with &lt;a href="https://secureshellfish.app/">Secure ShellFish&lt;/a>.&lt;/p>
+&lt;h2 id="why-i-chose-a-static-site-generator-ssg-as-my-content-management-system-cms">Why I chose a Static Site Generator (SSG) as my Content Management System (CMS)&lt;/h2>
+&lt;p>Having some experience with &lt;a href="https://www.markdownguide.org/cheat-sheet/">Markdown&lt;/a> while using &lt;a href="https://obsidian.md/">Obsidian&lt;/a> (my choice of PKM which I highly recommend) and back in my college days with &lt;a href="https://apps.apple.com/al/app/mou-markdown-editor/id1308265497">Mou&lt;/a> and &lt;a href="https://brettterpstra.com/projects/nvalt/">Nvalt&lt;/a> for note taking — I think it is only wise to write in .md for this second blog I&amp;rsquo;m starting. (You can find me under my main handle &lt;a href="https://www.eclecticpassions.net">@eclecticpassions&lt;/a>).&lt;/p>
+&lt;p>Writing in the Wordpress web interface is quite finicky&amp;hellip; I am not a fan. Trying to optimize the webpage load times is also a hassle. Recently, I discovered webrings dedicated to lightweight webpages, e.g. &lt;a href="https://250kb.club">250kb.club&lt;/a>, &lt;a href="https://512kb.club">512kb.club&lt;/a> and &lt;a href="https://1mb.club">1mb.club&lt;/a>.&lt;/p>
+&lt;p>These fast, content focused blogs piqued my interests greatly. I realized most of the sites listed are static websites, using static site generators like Jekyll or Hugo. I also recall some of my Mastodon friends have mentioned it before. Hence, I bought a new domain name on &lt;a href="https://porkbun.com/">Porkbun&lt;/a> (first time customer, liking it so far), installed &lt;a href="https://gohugo.io/">Hugo&lt;/a> (seems to be quite popular and one of the fastest SSGs around), chose a theme (&lt;a href="https://github.com/lxndrblz/anatole">Anatole&lt;/a>) and deployed it with &lt;a href="https://pages.github.com/">GitHub Pages&lt;/a>.&lt;/p>
+&lt;h3 id="domain-name-choice">Domain name choice&lt;/h3>
+&lt;p>It took me a day to think of a suitable name but I am quite happy with it. I think &amp;ldquo;Burgeon Lab&amp;rdquo; suits my use case quite well.&lt;/p>
+&lt;blockquote>
+&lt;p>Burgeon (&lt;em>verb&lt;/em>) — Begin to grow or increase rapidly; flourish.&lt;/p>
+&lt;/blockquote>
+&lt;p>I will treat it as a place where I can document my side projects and share my progress.&lt;/p>
+&lt;h2 id="first-two-projects">First two projects&lt;/h2>
+&lt;p>To start off, I will be documenting these two topics:&lt;/p>
+&lt;ol>
+&lt;li>Using Hugo as a beginner coming from Wordpress&lt;/li>
+&lt;li>Setting up self-hosted services on my Raspberry Pi 4B with &lt;a href="https://www.docker.com/get-started/">Docker&lt;/a> and &lt;a href="https://www.portainer.io/">Portainer&lt;/a>, acting as my first ever homelab server&lt;/li>
+&lt;/ol>
+&lt;p>Thanks for reading, if you intend to follow along, please feel free to follow my RSS feed or follow me on &lt;a href="https://fosstodon.org/@eclecticpassions">Mastodon&lt;/a> where I will be post updates.&lt;/p>
+&lt;div class="footnotes" role="doc-endnotes">
+&lt;hr>
+&lt;ol>
+&lt;li id="fn:1">
+&lt;p>My beloved MBA from 2012 is still running strong! I am just waiting for the 3nm Apple silicon chips to be released, planning to get either the 14&amp;quot; or 16&amp;quot; MacBook Pro. But with possible rumours of it being delayed, I am considering getting a M1 or M2 Mac Mini with 16GB ram in the meantime (if I can find one in the second-hand market).&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/div></description></item></channel></rss>
