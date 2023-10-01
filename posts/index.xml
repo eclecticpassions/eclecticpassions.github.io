@@ -1,9 +1,11 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Burgeon Lab - Where Projects Prosper</title><link>https://www.burgeonlab.com/posts/</link><description>Recent content in Posts on Burgeon Lab - Where Projects Prosper</description><generator>Hugo -- gohugo.io</generator><language>en-GB</language><lastBuildDate>Thu, 28 Sep 2023 19:05:34 +0800</lastBuildDate><atom:link href="https://www.burgeonlab.com/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Sudden Influx of New Gear</title><link>https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/</link><pubDate>Thu, 28 Sep 2023 19:05:34 +0800</pubDate><guid>https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Burgeon Lab - Where Projects Prosper</title><link>https://www.burgeonlab.com/posts/</link><description>Recent content in Posts on Burgeon Lab - Where Projects Prosper</description><generator>Hugo -- gohugo.io</generator><language>en-GB</language><lastBuildDate>Thu, 28 Sep 2023 19:05:34 +0800</lastBuildDate><atom:link href="https://www.burgeonlab.com/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Sudden Influx of New Gear</title><link>https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/</link><pubDate>Thu, 28 Sep 2023 19:05:34 +0800</pubDate><guid>https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/</guid><description>&lt;hr>
 &lt;img
 sizes="(min-width: 35em) 1080px, 100vw"
 srcset='
-, /posts/2023/sudden-influx-of-new-gear/macmini_geniusbar_hub300bdf4021a51e9f447338cba8eb4a4_95972_500x0_resize_q75_h2_box_2.webp 500w
-, /posts/2023/sudden-influx-of-new-gear/macmini_geniusbar_hub300bdf4021a51e9f447338cba8eb4a4_95972_1080x0_resize_q75_h2_box_2.webp 1080w
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/macmini_geniusbar_hub300bdf4021a51e9f447338cba8eb4a4_95972_500x0_resize_q75_h2_box_2.webp 500w"
+media="(min-width: 35em)">
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/macmini_geniusbar_hub300bdf4021a51e9f447338cba8eb4a4_95972_1080x0_resize_q75_h2_box_2.webp 1080w"
+media="(min-width: 35em)">
 '
 src="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/macmini_geniusbar.webp"
 alt="At the Apple Genius Bar">
@@ -14,7 +16,8 @@ alt="At the Apple Genius Bar">
 &lt;img
 sizes="(min-width: 35em) 1080px, 100vw"
 srcset='
-, /posts/2023/sudden-influx-of-new-gear/ssd_health_huad26355c92a42c086bb6bbadb67dd20c_59700_500x0_resize_q75_h2_box_2.webp 500w
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/ssd_health_hu42a21aa5f63b52e40044d0f5b428e2dd_61030_500x0_resize_q75_h2_box_2.webp 500w"
+media="(min-width: 35em)">
 '
 src="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/ssd_health.webp"
 alt="Smartctl results of the 2012 MacBook Air">
@@ -36,9 +39,12 @@ alt="Smartctl results of the 2012 MacBook Air">
 &lt;img
 sizes="(min-width: 35em) 1080px, 100vw"
 srcset='
-, /posts/2023/sudden-influx-of-new-gear/memfail_m1_hua5369822d9f3b3c887b4f3d241522b93_43632_500x0_resize_q75_h2_box_2.webp 500w
-, /posts/2023/sudden-influx-of-new-gear/memfail_m1_hua5369822d9f3b3c887b4f3d241522b93_43632_1080x0_resize_q75_h2_box_2.webp 1080w
-, /posts/2023/sudden-influx-of-new-gear/memfail_m1_hua5369822d9f3b3c887b4f3d241522b93_43632_1500x0_resize_q75_h2_box_2.webp 1500w
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/memfail_m1_hua5369822d9f3b3c887b4f3d241522b93_43632_500x0_resize_q75_h2_box_2.webp 500w"
+media="(min-width: 35em)">
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/memfail_m1_hua5369822d9f3b3c887b4f3d241522b93_43632_1080x0_resize_q75_h2_box_2.webp 1080w"
+media="(min-width: 35em)">
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/memfail_m1_hua5369822d9f3b3c887b4f3d241522b93_43632_1500x0_resize_q75_h2_box_2.webp 1500w"
+media="(min-width: 35em)">
 '
 src="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/memfail_m1.webp"
 alt="Mac Mini M1 Diagnostic Scan">
@@ -57,18 +63,24 @@ alt="Mac Mini M1 Diagnostic Scan">
 &lt;img
 sizes="(min-width: 35em) 1080px, 100vw"
 srcset='
-, /posts/2023/sudden-influx-of-new-gear/dust_before_huf4b8ce38111f3e35917ad241d4544365_430376_500x0_resize_q75_h2_box_2.webp 500w
-, /posts/2023/sudden-influx-of-new-gear/dust_before_huf4b8ce38111f3e35917ad241d4544365_430376_1080x0_resize_q75_h2_box_2.webp 1080w
-, /posts/2023/sudden-influx-of-new-gear/dust_before_huf4b8ce38111f3e35917ad241d4544365_430376_1500x0_resize_q75_h2_box_2.webp 1500w
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/dust_before_huf4b8ce38111f3e35917ad241d4544365_430376_500x0_resize_q75_h2_box_2.webp 500w"
+media="(min-width: 35em)">
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/dust_before_huf4b8ce38111f3e35917ad241d4544365_430376_1080x0_resize_q75_h2_box_2.webp 1080w"
+media="(min-width: 35em)">
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/dust_before_huf4b8ce38111f3e35917ad241d4544365_430376_1500x0_resize_q75_h2_box_2.webp 1500w"
+media="(min-width: 35em)">
 '
 src="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/dust_before.webp"
 alt="11 year old crud">
 &lt;img
 sizes="(min-width: 35em) 1080px, 100vw"
 srcset='
-, /posts/2023/sudden-influx-of-new-gear/dust_after_huadc4f7e44d53af7bc8c55ab08793d647_414164_500x0_resize_q75_h2_box_2.webp 500w
-, /posts/2023/sudden-influx-of-new-gear/dust_after_huadc4f7e44d53af7bc8c55ab08793d647_414164_1080x0_resize_q75_h2_box_2.webp 1080w
-, /posts/2023/sudden-influx-of-new-gear/dust_after_huadc4f7e44d53af7bc8c55ab08793d647_414164_1500x0_resize_q75_h2_box_2.webp 1500w
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/dust_after_huadc4f7e44d53af7bc8c55ab08793d647_414164_500x0_resize_q75_h2_box_2.webp 500w"
+media="(min-width: 35em)">
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/dust_after_huadc4f7e44d53af7bc8c55ab08793d647_414164_1080x0_resize_q75_h2_box_2.webp 1080w"
+media="(min-width: 35em)">
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/dust_after_huadc4f7e44d53af7bc8c55ab08793d647_414164_1500x0_resize_q75_h2_box_2.webp 1500w"
+media="(min-width: 35em)">
 '
 src="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/dust_after.webp"
 alt="After cleaning my 2012 MacBook Air">&lt;/p>
@@ -77,9 +89,12 @@ alt="After cleaning my 2012 MacBook Air">&lt;/p>
 &lt;img
 sizes="(min-width: 35em) 1080px, 100vw"
 srcset='
-, /posts/2023/sudden-influx-of-new-gear/rpi_dual_fan_hub5275651b4ba60dc532f182f54915cbe_359714_500x0_resize_q75_h2_box_2.webp 500w
-, /posts/2023/sudden-influx-of-new-gear/rpi_dual_fan_hub5275651b4ba60dc532f182f54915cbe_359714_1080x0_resize_q75_h2_box_2.webp 1080w
-, /posts/2023/sudden-influx-of-new-gear/rpi_dual_fan_hub5275651b4ba60dc532f182f54915cbe_359714_1500x0_resize_q75_h2_box_2.webp 1500w
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/rpi_dual_fan_hub5275651b4ba60dc532f182f54915cbe_359714_500x0_resize_q75_h2_box_2.webp 500w"
+media="(min-width: 35em)">
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/rpi_dual_fan_hub5275651b4ba60dc532f182f54915cbe_359714_1080x0_resize_q75_h2_box_2.webp 1080w"
+media="(min-width: 35em)">
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/rpi_dual_fan_hub5275651b4ba60dc532f182f54915cbe_359714_1500x0_resize_q75_h2_box_2.webp 1500w"
+media="(min-width: 35em)">
 '
 src="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/rpi_dual_fan.webp"
 alt="Yurobot dual fan attachment with LED for the Raspberry Pi 4B">
@@ -87,8 +102,10 @@ alt="Yurobot dual fan attachment with LED for the Raspberry Pi 4B">
 &lt;img
 sizes="(min-width: 35em) 1080px, 100vw"
 srcset='
-, /posts/2023/hello-hugo/hello-hugo-cover_hu0fe8d66c2d1ee37fbfd6786db938cc92_293388_500x0_resize_q75_h2_box_2.webp 500w
-, /posts/2023/hello-hugo/hello-hugo-cover_hu0fe8d66c2d1ee37fbfd6786db938cc92_293388_1080x0_resize_q75_h2_box_2.webp 1080w
+source srcset="https://www.burgeonlab.com/posts/2023/hello-hugo/hello-hugo-cover_hu0fe8d66c2d1ee37fbfd6786db938cc92_293388_500x0_resize_q75_h2_box_2.webp 500w"
+media="(min-width: 35em)">
+source srcset="https://www.burgeonlab.com/posts/2023/hello-hugo/hello-hugo-cover_hu0fe8d66c2d1ee37fbfd6786db938cc92_293388_1080x0_resize_q75_h2_box_2.webp 1080w"
+media="(min-width: 35em)">
 '
 src="https://www.burgeonlab.com/posts/2023/hello-hugo/hello-hugo-cover.webp"
 alt="Raspberry Pi 1 Model B in acrylic case">
