@@ -1,4 +1,43 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Burgeon Lab - Where Projects Prosper</title><link>https://www.burgeonlab.com/posts/</link><description>Recent content in Posts on Burgeon Lab - Where Projects Prosper</description><generator>Hugo -- gohugo.io</generator><language>en-GB</language><lastBuildDate>Thu, 28 Sep 2023 19:05:34 +0800</lastBuildDate><atom:link href="https://www.burgeonlab.com/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Sudden Influx of New Gear</title><link>https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/</link><pubDate>Thu, 28 Sep 2023 19:05:34 +0800</pubDate><guid>https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/</guid><description>&lt;p>Having gone on a deep dive in the mid of September learning about Hugo and Git for documenting my Raspberry Pi 4B homelab journey; I found myself suddenly distracted by a great deal on a Mac Mini M1 in the local second-hand market.&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Burgeon Lab - Where Projects Prosper</title><link>https://www.burgeonlab.com/posts/</link><description>Recent content in Posts on Burgeon Lab - Where Projects Prosper</description><generator>Hugo -- gohugo.io</generator><language>en-GB</language><lastBuildDate>Sun, 01 Oct 2023 20:35:10 +0800</lastBuildDate><atom:link href="https://www.burgeonlab.com/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Booting DietPi from SSD on a Raspberry Pi 4B 8GB</title><link>https://www.burgeonlab.com/posts/2023/dietpi-on-ssd/</link><pubDate>Sun, 01 Oct 2023 20:35:10 +0800</pubDate><guid>https://www.burgeonlab.com/posts/2023/dietpi-on-ssd/</guid><description>&lt;h2 id="setting-up-dietpi-on-a-headless-raspberry-pi-4b-8gb">Setting up DietPi on a headless Raspberry Pi 4B 8GB&lt;/h2>
+&lt;img
+sizes="(min-width: 35em) 1080px, 100vw"
+srcset='
+source srcset="https://www.burgeonlab.com/posts/2023/dietpi-on-ssd/title_huce33f2e11332cf9c86c7f22ec4dd5b12_30354_500x0_resize_q75_h2_box_2.webp 500w"
+media="(min-width: 35em)">
+'
+src="https://www.burgeonlab.com/posts/2023/dietpi-on-ssd/title.webp"
+alt="ALT TEXT HERE">
+&lt;p>Using &lt;a href="https://etcher.balena.io/">Balena Etcher&lt;/a> on macOS, I flashed a copy of the &lt;a href="https://dietpi.com/#downloadinfo">Raspberry Pi 2/3/4 DietPi&lt;/a> image onto a Kingston 128GB Canvas Go Plus microSD card. Went through the default configuration via SSH in a Wi-Fi, headless setup.&lt;/p>
+&lt;h3 id="good-ol-ethernet-saves-the-day">Good ol&amp;rsquo; Ethernet saves the day&lt;/h3>
+&lt;p>Following the installation &lt;a href="https://dietpi.com/docs/install/">guide&lt;/a>, despite enabling WiFi in the the initial one-time-use &lt;code>dietpi.txt&lt;/code> and entering my WiFi credentials in &lt;code>dietpi-wifi.txt&lt;/code>, I was unable to get the RPi to connect to my network (which meant I couldn&amp;rsquo;t scan for its IP address). I resorted to plugging it into the router with an Ethernet cable; got the IP address of the RPi and turned on WiFi manually in &lt;code>dietpi-config&lt;/code> after the first boot. My router is not conveniently accessible, so it was a relief when I could get it to work after the initial setup.&lt;/p>
+&lt;h3 id="not-all-wifi-channels-are-showing">Not all WiFi channels are showing&lt;/h3>
+&lt;p>If you are having trouble finding the 5Ghz channel of your WiFi connection, ensure the country code is correct. For example, I had HK (Hong Kong) set in the DietPi network locale settings, but it could only detect my 2.4Ghz network. After changing it to CN (China), I was able to see the 5G SSID.&lt;/p>
+&lt;h2 id="booting-dietpi-from-external-ssd">Booting DietPi from external SSD&lt;/h2>
+&lt;p>I bought a UGREEN USB 3.1 enclosure for my Samsung 870 EVO SATA SSD. The SSD was previously formatted as ext4 from when I was messing around with antiX and Debian on two old PCs. I had my music library in one of the /home partitions (the other two partitions being a /swap and /boot).&lt;/p>
+&lt;p>And here is why it became a bit tricky for me; I couldn&amp;rsquo;t find an easy way to clone the current OS image from the microSD onto the existing /boot partition, delete the /swap and keep the /home so my music files remain untouched.&lt;/p>
+&lt;p>I can&amp;rsquo;t read or write ext4 on macOS (ext4fuse didn&amp;rsquo;t work and I didn&amp;rsquo;t want to pay for the Paragon software), so I had to find a way to clone on the Raspberry Pi CLI via SSH. It took me some searching before I found a way to make a backup image of the currently running DietPi OS from the microSD.&lt;/p>
+&lt;p>Originally I was going to use &lt;code>dd&lt;/code> to make a copy but I read that it is not good practice to copy a live, working system this way. I eventually used a tool called &lt;code>image-utils&lt;/code> found at the &lt;a href="https://forums.raspberrypi.com/viewtopic.php?t=332000">Raspberry Pi forum&lt;/a>. Using this &lt;code>image-backup&lt;/code> script, a backup of the current system can be made&lt;/p>
+&lt;p>I tried flashing the modified DietPi backup image to the /boot partition, preserving the /home partition with my music files, but in the end, all I could do was flash the .img file using Etcher again on my mac to the SSD, formatting the drive in the process.&lt;/p>
+&lt;p>With that out of the way, I shut down the Pi and removed the microSD and plugged in the UGREEN enclosure into one the the USB 3.0 (blue) ports and turned on the Pi. It booted up without any trouble and I called it a day.&lt;/p>
+&lt;h2 id="installing-software">Installing software&lt;/h2>
+&lt;p>Filled with anticipation, I went ahead and installed some services via the optimized &lt;code>dietpi-software&lt;/code> list.&lt;/p>
+&lt;img
+sizes="(min-width: 35em) 1080px, 100vw"
+srcset='
+source srcset="https://www.burgeonlab.com/posts/2023/dietpi-on-ssd/dietpi_software_hu8010a8e4f5b36558ccd02d30517d674d_47602_500x0_resize_q75_h2_box_2.webp 500w"
+media="(min-width: 35em)">
+'
+src="https://www.burgeonlab.com/posts/2023/dietpi-on-ssd/dietpi_software.webp"
+alt="Software to be installed on the DietPi distro for Raspberry Pi 4B">
+&lt;p>I only have experience with &lt;a href="https://www.navidrome.org/">Navidrome&lt;/a> and &lt;a href="https://pi-hole.net/">Pi-hole&lt;/a>. Some other self-hosted applications I am planning to run on my Raspberry Pi 4B homelab that aren&amp;rsquo;t in the DietPi list are:&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://miniflux.app/docs/installation.html">Miniflux&lt;/a> - RSS&lt;/li>
+&lt;li>&lt;a href="https://gitlab.com/py_crash/docker-libregrammar">Libregrammar&lt;/a> - LT fork&lt;/li>
+&lt;li>&lt;a href="https://github.com/wallabag/wallabag">Wallabag&lt;/a> - bookmark manager&lt;/li>
+&lt;li>&lt;a href="https://calibre-ebook.com/">calibre&lt;/a> - ebook manager&lt;/li>
+&lt;li>&lt;a href="https://tailscale.com/">Tailscale&lt;/a> - VPN&lt;/li>
+&lt;/ul>
+&lt;p>A great site to discover programs to self host is &lt;a href="https://github.com/awesome-selfhosted/awesome-selfhosted">awesome-selfhosted/awesome-selfhosted&lt;/a>. I&amp;rsquo;ll be updating how I set up each of these as I learn how to do it!&lt;/p></description></item><item><title>Sudden Influx of New Gear</title><link>https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/</link><pubDate>Thu, 28 Sep 2023 19:05:34 +0800</pubDate><guid>https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/</guid><description>&lt;p>Having gone on a deep dive in the mid of September learning about Hugo and Git for documenting my Raspberry Pi 4B homelab journey; I found myself suddenly distracted by a great deal on a Mac Mini M1 in the local second-hand market.&lt;/p>
 &lt;img
 sizes="(min-width: 35em) 1080px, 100vw"
 srcset='
