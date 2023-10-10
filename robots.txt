@@ -10,6 +10,12 @@ Disallow:
 User-agent: Baiduspider
 Disallow:
 
+User-agent: AhrefsSiteAudit
+Disallow:
+
+User-agent: AhrefsBot
+Disallow:
+
 User-agent: GPTBot
 Disallow: /
 
