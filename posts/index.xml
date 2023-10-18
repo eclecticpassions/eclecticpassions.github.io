@@ -47,7 +47,7 @@ media="(min-width: 35em)">
 '
 src="https://www.burgeonlab.com/posts/2023/dietpi-on-ssd/dietpi_software.webp"
 alt="Software to be installed on the DietPi distro for Raspberry Pi 4B">
-&lt;p>I only have experience with &lt;a href="https://www.navidrome.org/">Navidrome&lt;/a> and &lt;a href="https://pi-hole.net/">Pi-hole&lt;/a>. Some other self-hosted applications I am planning to run on my Raspberry Pi 4B homelab that aren&amp;rsquo;t in the list are:&lt;/p>
+&lt;p>I only have experience with &lt;a href="https://www.navidrome.org/">Navidrome&lt;/a> and &lt;a href="https://pi-hole.net/">Pi-hole&lt;/a>. Some other self-hosted applications I am planning to run on my Raspberry Pi 4B homelab are:&lt;/p>
 &lt;ul>
 &lt;li>&lt;a href="https://miniflux.app/docs/installation.html">Miniflux&lt;/a> - RSS&lt;/li>
 &lt;li>&lt;a href="https://gitlab.com/py_crash/docker-libregrammar">Libregrammar&lt;/a> - LT fork&lt;/li>
