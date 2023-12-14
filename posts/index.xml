@@ -1,4 +1,72 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Burgeon Lab - Where Projects Prosper</title><link>https://www.burgeonlab.com/posts/</link><description>Recent content in Posts on Burgeon Lab - Where Projects Prosper</description><generator>Hugo -- gohugo.io</generator><language>en-GB</language><lastBuildDate>Sat, 21 Oct 2023 10:58:31 +0800</lastBuildDate><atom:link href="https://www.burgeonlab.com/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Adding a simple "scroll to the top" button to your Hugo site</title><link>https://www.burgeonlab.com/posts/2023/hugo-scroll-to-top/</link><pubDate>Sat, 21 Oct 2023 10:58:31 +0800</pubDate><guid>https://www.burgeonlab.com/posts/2023/hugo-scroll-to-top/</guid><description>&lt;h2 id="using-just-html-and-css">Using just HTML and CSS&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Burgeon Lab - Where Projects Prosper</title><link>https://www.burgeonlab.com/posts/</link><description>Recent content in Posts on Burgeon Lab - Where Projects Prosper</description><generator>Hugo -- gohugo.io</generator><language>en-GB</language><lastBuildDate>Tue, 24 Oct 2023 12:09:15 +0800</lastBuildDate><atom:link href="https://www.burgeonlab.com/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Mac Mini M1 Problems</title><link>https://www.burgeonlab.com/posts/2023/mac-troubleshooting/</link><pubDate>Tue, 24 Oct 2023 12:09:15 +0800</pubDate><guid>https://www.burgeonlab.com/posts/2023/mac-troubleshooting/</guid><description>&lt;h2 id="troubleshooting-notes">Troubleshooting notes&lt;/h2>
+&lt;p>Having come from a 10+ year old MacBook Air that&amp;rsquo;s still running smoothly on macOS Catalina; I find it a bit disconcerting how I need to troubleshoot through weird bugs and errors on a modern M1 Apple Silicon Mac Mini running macOS Sonoma 14. I&amp;rsquo;ve used Mojave, El Capitan and Catalina on the Air and don&amp;rsquo;t remember having this many bugs / errors&amp;hellip;&lt;/p>
+&lt;p>Anyhow, this post will mainly be bullet points on how I troubleshoot the issues encountered. I will be updating this post as I find solutions to further problems. Hope it helps you!&lt;/p>
+&lt;h2 id="problems-on-my-mac-mini-m1-2020-so-far">Problems on my Mac Mini M1 (2020) so far&lt;/h2>
+&lt;ol>
+&lt;li>Unable to eject connected disks&lt;/li>
+&lt;li>Universal Control not connecting with iPad Mini 6&lt;/li>
+&lt;li>Apps unable to open when downloaded outside of the Mac App Store&lt;/li>
+&lt;/ol>
+&lt;h2 id="my-workarounds-for-these-errors">My workarounds for these errors&lt;/h2>
+&lt;h3 id="cant-eject-external-disks">Can&amp;rsquo;t eject external disks&lt;/h3>
+&lt;ul>
+&lt;li>Close all active applications that could be using the disk.&lt;/li>
+&lt;li>Force restart Finder.&lt;/li>
+&lt;li>Log out and log back in. Try ejecting the disk again.&lt;/li>
+&lt;li>Turn off the computer and unplug the drive after the drive stops spinning / light turns off.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;em>Note about Thunderbolt external enclosures - unsafe shutdowns&lt;/em>&lt;/p>
+&lt;ul>
+&lt;li>Despite ejecting Thunderbolt &lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup> drive volumes, the drive remains connected within Disk Utility. If the drive is unplugged while the computer is running, it will result in +1 in the &amp;ldquo;unsafe shutdown&amp;rdquo; counter.&lt;/li>
+&lt;li>After researching for other users facing &lt;a href="https://forums.macrumors.com/threads/thunderbolt-3-m-2-nvme-ssd-enclosures.2027925/page-30">similar issues&lt;/a> with their SSD enclosures, it seems to be a problem with the Mac NVME driver not fully ejecting the Thunderbolt device.&lt;/li>
+&lt;li>To prevent unsafe shutdowns, I make sure to only physically disconnect when the Mac is off.&lt;/li>
+&lt;/ul>
+&lt;h3 id="universal-control-not-working---troubleshooting-steps">Universal Control not working - troubleshooting steps&lt;/h3>
+&lt;ul>
+&lt;li>
+&lt;p>Toggle off &amp;ldquo;Block all incoming connections&amp;rdquo; and &amp;ldquo;Enable stealth mode&amp;rdquo; in System Settings &amp;gt; Network &amp;gt; Firewall &amp;gt; Options.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>In the same window, add &amp;ldquo;Control Center.app&amp;rdquo; (&lt;code>/System/Library/CoreServices/ControlCenter.app&lt;/code>) and &amp;ldquo;Universal Control.app&amp;rdquo; (&lt;code>/System/Library/CoreServices/UniversalControl.app&lt;/code>) to &amp;ldquo;Allow incoming connections&amp;rdquo;.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Remember to turn on bluetooth on both devices and connected to the same WiFi network.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>In System Settings &amp;gt; Displays &amp;gt; Advance, ensure all three toggles are on under &amp;ldquo;Link to Mac or iPad&amp;rdquo;.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Confirm any third-party firewall / network filter is not blocking Universal Control, e.g. Little Snitch, LuLu, NetBarrier.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Both devices should be signed in under the same Apple ID with 2FA turned on.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>If you&amp;rsquo;ve done all the above but it&amp;rsquo;s still not connecting / device is not being recognized; sleep your Mac and try again upon wake.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>To confirm it has worked, you should see a second device graphic next to your main monitor, in System Settings &amp;gt; Displays. Clicking the + button will show &amp;ldquo;Link keyboard and mouse to&amp;rdquo; and your device name e.g. ipadmini6. You can arrange the display so that you can slide the mouse easily to the remote device.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="error-the-app-is-damaged-and-can-not-be-opened-on-mac">Error: &amp;ldquo;The App is Damaged and Can not be Opened on Mac&amp;rdquo;&lt;/h3>
+&lt;ul>
+&lt;li>This is caused by com.apple.quarantine, a safety feature. It prevents opening apps from unidentified developers or apps downloaded outside of the Mac App Store.&lt;/li>
+&lt;li>As I often use &lt;a href="https://formulae.brew.sh/">Homebrew&lt;/a> or download apps directly from GitHub repos, I get this error quite often.&lt;/li>
+&lt;li>To remove the quarantine attribute from the app, open terminal and type the following. This is an example for the app &lt;a href="https://peazip.github.io/">PeaZip&lt;/a>.&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-fallback" data-lang="fallback">&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#55595f">1&lt;/span>&lt;span>xattr -d com.apple.quarantine /Applications/peazip.app
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>If you want to remove the attribute recursively (including all its files and subfolders), add the &lt;code>-r flag&lt;/code>. For example:&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-fallback" data-lang="fallback">&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#55595f">1&lt;/span>&lt;span>xattr -r -d com.apple.quarantine /Applications/Feishin.app
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;div class="footnotes" role="doc-endnotes">
+&lt;hr>
+&lt;ol>
+&lt;li id="fn:1">
+&lt;p>I have the ACASIS TBU405PROM1 with Samsung 980 Pro 2TB partitioned into two volumes; one for Time Machine, the other for general purpose.&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/div></description></item><item><title>Adding a simple "scroll to the top" button to your Hugo site</title><link>https://www.burgeonlab.com/posts/2023/hugo-scroll-to-top/</link><pubDate>Sat, 21 Oct 2023 10:58:31 +0800</pubDate><guid>https://www.burgeonlab.com/posts/2023/hugo-scroll-to-top/</guid><description>&lt;h2 id="using-just-html-and-css">Using just HTML and CSS&lt;/h2>
 &lt;p>With only basic HTML and CSS knowledge, it was great news when I found out that a scroll-to-top button can be easily created without Javascript &lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>. I went ahead to add it to my current Hugo theme; &lt;a href="https://github.com/lxndrblz/anatole">Anatole&lt;/a>.&lt;/p>
 &lt;p>The main gist is to create an anchor at the top of the page, and have the link / button go to the anchor when pressed so it &amp;ldquo;scrolls to the top&amp;rdquo;.&lt;/p>
 &lt;h2 id="where-to-put-the-anchor">Where to put the anchor?&lt;/h2>
