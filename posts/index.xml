@@ -1,4 +1,79 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Burgeon Lab - Where Projects Prosper</title><link>https://www.burgeonlab.com/posts/</link><description>Recent content in Posts on Burgeon Lab - Where Projects Prosper</description><generator>Hugo -- gohugo.io</generator><language>en-GB</language><lastBuildDate>Fri, 05 Apr 2024 11:51:56 +0800</lastBuildDate><atom:link href="https://www.burgeonlab.com/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Fixing TOC Anchor Links Behind Top Navigation Header in Hugo</title><link>https://www.burgeonlab.com/posts/2024/anchor-links-behind-top-navigation-header/</link><pubDate>Fri, 05 Apr 2024 11:51:56 +0800</pubDate><guid>https://www.burgeonlab.com/posts/2024/anchor-links-behind-top-navigation-header/</guid><description>&lt;h2 id="the-problem-at-hand">The Problem At Hand&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Burgeon Lab - Where Projects Prosper</title><link>https://www.burgeonlab.com/posts/</link><description>Recent content in Posts on Burgeon Lab - Where Projects Prosper</description><generator>Hugo -- gohugo.io</generator><language>en-GB</language><lastBuildDate>Thu, 22 Aug 2024 17:43:11 +0800</lastBuildDate><atom:link href="https://www.burgeonlab.com/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>SSH into KOreader (Kobo Aura One) from macOS</title><link>https://www.burgeonlab.com/posts/2024/ssh-to-kobo-koreader-mac/</link><pubDate>Thu, 22 Aug 2024 17:43:11 +0800</pubDate><guid>https://www.burgeonlab.com/posts/2024/ssh-to-kobo-koreader-mac/</guid><description>&lt;h2 id="background">Background&lt;/h2>
+&lt;p>I bought my first e-reader (a Kobo Aura One Limited Edition) recently and right away I chose &lt;a href="http://koreader.rocks/">KOReader&lt;/a> as my main software to read and manage my ebooks. KOReader allows for direct USB transfer, Calibre wireless transfer and also SSH. It was easy to use the former two options but I had trouble using SSH to connect to the Kobo using my Mac (on Sonoma 14.6.1) despite following the &lt;a href="https://github.com/koreader/koreader/wiki/SSH">instructions&lt;/a>.&lt;/p>
+&lt;h2 id="problem">Problem&lt;/h2>
+&lt;p>Even with the two &amp;ldquo;workarounds&amp;rdquo; listed, I was not able to connect. The two workarounds offered are:&lt;/p>
+&lt;ol>
+&lt;li>When scp fails use: &lt;code>cat src_file | ssh -T -x -p 2222 user@ip 'cat &amp;gt; dst_file'&lt;/code>&lt;/li>
+&lt;li>Or use &lt;a href="https://github.com/thomasrebele/lsyncd-workaround">lysncd-workaround&lt;/a> as a scp or rsync replacement for when remote doesn&amp;rsquo;t support scp or rsync.&lt;/li>
+&lt;/ol>
+&lt;h2 id="fix">Fix&lt;/h2>
+&lt;p>It took me some trial and error to get lysncd to work and transfer files over via SSH to the Kobo, but it&amp;rsquo;s a great alternative to Calibre wireless transfer now that I have it sorted. Here are detailed instructions on how to use lysncd with KOReader SSH mode on a Mac.&lt;/p>
+&lt;ol>
+&lt;li>Install lysncd &lt;code>brew install lsyncd&lt;/code>.&lt;/li>
+&lt;li>Make a config file (in lua syntax), call it &lt;code>.no-tty.lsync&lt;/code> by &lt;code>touch .no-tty.lsync&lt;/code> and then open the file with your preferred text editor - I use VSCodium. Change the language mode to .lua. (I made it a hidden file by adding the dot to the front. It&amp;rsquo;s up to you.) Paste in the template below, I added some notes to explain the variables.&lt;/li>
+&lt;li>Save the config file in the working directory &lt;code>cd /Users/JohnDoe/Documents/KoboKOReader/.no-tty.lsync&lt;/code>&lt;/li>
+&lt;li>Turn on WiFi and SSH mode (no password if on safe/home network, turn off immediately after done with transfer) in KOReader on the Kobo. Set a unique port number and note down the IP address in the popup window.&lt;/li>
+&lt;li>In your working directory, run &lt;code>sudo lsyncd .no-tty.lsync&lt;/code> Remember to type &lt;code>sudo&lt;/code> because it doesn&amp;rsquo;t work and throws an error without it. &lt;code>&amp;quot;Cannot access /dev/fsevents monitor! (1: Operation not permitted)&amp;quot;&lt;/code>&lt;/li>
+&lt;li>If for some reason it is still not working, try giving terminal.app full device access in System Settings &amp;gt; Privacy &amp;amp; Security &amp;gt; Full Disk Access &amp;gt; add Terminal.app. Restart terminal. and repeat step 5.&lt;/li>
+&lt;li>Whatever is in the source directory will be synced over. Once that has completed, click &lt;code>ctrl+c&lt;/code> to end the process.&lt;/li>
+&lt;li>Remember to keep WiFi on and do not allow the Kobo to sleep during transfer.&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-lua" data-lang="lua">&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59"> 1&lt;/span>&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59"> 2&lt;/span>&lt;span>settings {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59"> 3&lt;/span>&lt;span> logfile &lt;span style="color:#fe8019">=&lt;/span> &lt;span style="color:#b8bb26">&amp;#34;/dev/stdout&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59"> 4&lt;/span>&lt;span> nodaemon &lt;span style="color:#fe8019">=&lt;/span> &lt;span style="color:#fe8019">true&lt;/span>, &lt;span style="color:#928374;font-style:italic">-- If you started lsyncd in the foreground (for example, with nodaemon set to true), you can stop it by pressing Ctrl+C in the terminal where it is running. This will send an interrupt signal to lsyncd, causing it to terminate.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59"> 5&lt;/span>&lt;span> inotifyMode &lt;span style="color:#fe8019">=&lt;/span> &lt;span style="color:#b8bb26">&amp;#34;Polling&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59"> 6&lt;/span>&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59"> 7&lt;/span>&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59"> 8&lt;/span>&lt;span> port &lt;span style="color:#fe8019">=&lt;/span> &lt;span style="color:#d3869b">1234&lt;/span> &lt;span style="color:#928374;font-style:italic">-- Enter port set on KOReader network ssh settings&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59"> 9&lt;/span>&lt;span> remote &lt;span style="color:#fe8019">=&lt;/span> &lt;span style="color:#b8bb26">&amp;#34;root@192.169.1.1&amp;#34;&lt;/span> &lt;span style="color:#928374;font-style:italic">-- Enter ip address for KOReader when you turn on ssh mode&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">10&lt;/span>&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">11&lt;/span>&lt;span> ensure_target &lt;span style="color:#fe8019">=&lt;/span> &lt;span style="color:#fe8019">function&lt;/span>(event)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">12&lt;/span>&lt;span> &lt;span style="color:#fe8019">local&lt;/span> cmd &lt;span style="color:#fe8019">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">13&lt;/span>&lt;span> &lt;span style="color:#928374;font-style:italic">-- connect to server and go to dst dir&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">14&lt;/span>&lt;span> &lt;span style="color:#b8bb26">&amp;#39;sh -c &lt;/span>&lt;span style="color:#b8bb26">\&amp;#39;&lt;/span>&lt;span style="color:#b8bb26">ssh -T -x -p &amp;#39;&lt;/span>&lt;span style="color:#fe8019">..&lt;/span>port&lt;span style="color:#fe8019">..&lt;/span>&lt;span style="color:#b8bb26">&amp;#39; &amp;#39;&lt;/span>&lt;span style="color:#fe8019">..&lt;/span>remote&lt;span style="color:#fe8019">..&lt;/span>&lt;span style="color:#b8bb26">&amp;#39; &amp;#34;sh -c &lt;/span>&lt;span style="color:#b8bb26">\\\&amp;#34;&lt;/span>&lt;span style="color:#b8bb26">mkdir -p &lt;/span>&lt;span style="color:#b8bb26">\\\\\\\&amp;#34;&lt;/span>&lt;span style="color:#b8bb26">&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">15&lt;/span>&lt;span> &lt;span style="color:#fe8019">..&lt;/span>event.target&lt;span style="color:#fe8019">..&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">16&lt;/span>&lt;span> &lt;span style="color:#928374;font-style:italic">-- write files&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">17&lt;/span>&lt;span> &lt;span style="color:#b8bb26">&amp;#39;&lt;/span>&lt;span style="color:#b8bb26">\\\\\\\&amp;#34;&lt;/span>&lt;span style="color:#b8bb26"> &lt;/span>&lt;span style="color:#b8bb26">\\\&amp;#34;&lt;/span>&lt;span style="color:#b8bb26"> &amp;#34; &lt;/span>&lt;span style="color:#b8bb26">\&amp;#39;&lt;/span>&lt;span style="color:#b8bb26">&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">18&lt;/span>&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">19&lt;/span>&lt;span> os.execute(cmd)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">20&lt;/span>&lt;span> &lt;span style="color:#fe8019">end&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">21&lt;/span>&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">22&lt;/span>&lt;span> up &lt;span style="color:#fe8019">=&lt;/span> &lt;span style="color:#fe8019">function&lt;/span>(event)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">23&lt;/span>&lt;span> &lt;span style="color:#fe8019">local&lt;/span> cmd &lt;span style="color:#fe8019">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">24&lt;/span>&lt;span> &lt;span style="color:#928374;font-style:italic">-- go to src dir&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">25&lt;/span>&lt;span> &lt;span style="color:#b8bb26">&amp;#39;sh -c &lt;/span>&lt;span style="color:#b8bb26">\&amp;#39;&lt;/span>&lt;span style="color:#b8bb26">cd &amp;#34;&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">26&lt;/span>&lt;span> &lt;span style="color:#fe8019">..&lt;/span>event.source&lt;span style="color:#fe8019">..&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">27&lt;/span>&lt;span> &lt;span style="color:#928374;font-style:italic">-- read files&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">28&lt;/span>&lt;span> &lt;span style="color:#b8bb26">&amp;#39;&amp;#34;; tar cf - &amp;#34;./&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">29&lt;/span>&lt;span> &lt;span style="color:#fe8019">..&lt;/span>event.path&lt;span style="color:#fe8019">..&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">30&lt;/span>&lt;span> &lt;span style="color:#928374;font-style:italic">-- connect to server and go to dst dir&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">31&lt;/span>&lt;span> &lt;span style="color:#b8bb26">&amp;#39;&amp;#34; | ssh -T -x -p &amp;#39;&lt;/span>&lt;span style="color:#fe8019">..&lt;/span>port&lt;span style="color:#fe8019">..&lt;/span>&lt;span style="color:#b8bb26">&amp;#39; &amp;#39;&lt;/span>&lt;span style="color:#fe8019">..&lt;/span>remote&lt;span style="color:#fe8019">..&lt;/span>&lt;span style="color:#b8bb26">&amp;#39; &amp;#34;sh -c &lt;/span>&lt;span style="color:#b8bb26">\\\&amp;#34;&lt;/span>&lt;span style="color:#b8bb26">cd &lt;/span>&lt;span style="color:#b8bb26">\\\\\\\&amp;#34;&lt;/span>&lt;span style="color:#b8bb26">&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">32&lt;/span>&lt;span> &lt;span style="color:#fe8019">..&lt;/span>event.target&lt;span style="color:#fe8019">..&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">33&lt;/span>&lt;span> &lt;span style="color:#928374;font-style:italic">-- write files&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">34&lt;/span>&lt;span> &lt;span style="color:#b8bb26">&amp;#39;&lt;/span>&lt;span style="color:#b8bb26">\\\\\\\&amp;#34;&lt;/span>&lt;span style="color:#b8bb26">; tar xvf -&lt;/span>&lt;span style="color:#b8bb26">\\\&amp;#34;&lt;/span>&lt;span style="color:#b8bb26"> &amp;#34; &lt;/span>&lt;span style="color:#b8bb26">\&amp;#39;&lt;/span>&lt;span style="color:#b8bb26">&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">35&lt;/span>&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">36&lt;/span>&lt;span> spawnShell(event, cmd)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">37&lt;/span>&lt;span> &lt;span style="color:#fe8019">end&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">38&lt;/span>&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">39&lt;/span>&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">40&lt;/span>&lt;span> bash &lt;span style="color:#fe8019">=&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">41&lt;/span>&lt;span> maxProcesses &lt;span style="color:#fe8019">=&lt;/span> &lt;span style="color:#d3869b">2&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">42&lt;/span>&lt;span> onCreate &lt;span style="color:#fe8019">=&lt;/span> up,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">43&lt;/span>&lt;span> onModify &lt;span style="color:#fe8019">=&lt;/span> up,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">44&lt;/span>&lt;span> onDelete &lt;span style="color:#fe8019">=&lt;/span> &lt;span style="color:#b8bb26">&amp;#34;echo &amp;#39;deletion not supported: ^targetPathname&amp;#39;&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">45&lt;/span>&lt;span> onMove &lt;span style="color:#fe8019">=&lt;/span> &lt;span style="color:#b8bb26">&amp;#34;mv ^o.targetPathname ^d.targetPathname&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">46&lt;/span>&lt;span> onStartup &lt;span style="color:#fe8019">=&lt;/span> &lt;span style="color:#fe8019">function&lt;/span>(event)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">47&lt;/span>&lt;span> ensure_target(event)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">48&lt;/span>&lt;span> up(event)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">49&lt;/span>&lt;span> &lt;span style="color:#fe8019">end&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">50&lt;/span>&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">51&lt;/span>&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">52&lt;/span>&lt;span> sync{bash,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">53&lt;/span>&lt;span> source&lt;span style="color:#fe8019">=&lt;/span>&lt;span style="color:#b8bb26">&amp;#34;/Users/JohnDoe/Documents/KoboKOReader/&amp;#34;&lt;/span>, &lt;span style="color:#928374;font-style:italic">-- Files in this directory will be copied over to the target destination whenever lsycnd is running, ctrl+c to end process&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">54&lt;/span>&lt;span> target&lt;span style="color:#fe8019">=&lt;/span>&lt;span style="color:#b8bb26">&amp;#34;/mnt/onboard/destination_folder_name&amp;#34;&lt;/span>, &lt;span style="color:#928374;font-style:italic">-- Files from source directory (above) will be copied over to this target destination&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#756d59">55&lt;/span>&lt;span> }
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Hope this helps! Happy reading with KOReader.&lt;/p></description></item><item><title>Fixing TOC Anchor Links Behind Top Navigation Header in Hugo</title><link>https://www.burgeonlab.com/posts/2024/anchor-links-behind-top-navigation-header/</link><pubDate>Fri, 05 Apr 2024 11:51:56 +0800</pubDate><guid>https://www.burgeonlab.com/posts/2024/anchor-links-behind-top-navigation-header/</guid><description>&lt;h2 id="the-problem-at-hand">The Problem At Hand&lt;/h2>
 &lt;p>My current Hugo theme is &lt;a href="https://github.com/lxndrblz/anatole">Anatole&lt;/a> and I have only been using HTML and CSS to customize the site.&lt;/p>
 &lt;p>Today, I will go through a very simple way of adding some padding to the top of page while the top navigation header bar is present (i.e., when using a desktop browser or when the window is wider than 945px). It does not add any visible padding, only functionally, by adding a padding to the top of the page.&lt;/p>
 &lt;p>This is to fix the issue of the subheadings hiding behind the sticky header when it is clicked from the anchor links in the table of contents (TOC).&lt;/p>
@@ -36,7 +111,7 @@
 &lt;img
 sizes="(min-width: 35em) 1080px, 100vw"
 srcset='
-source srcset="https://www.burgeonlab.com/posts/2024/speed-up-loading-times-wttr-neofetch/terminal_hu0ceb5ce90fa0238884b962402cf54361_37394_500x0_resize_q75_h2_box_2.webp 500w"
+source srcset="https://www.burgeonlab.com/posts/2024/speed-up-loading-times-wttr-neofetch/terminal_hu7851662397441094053.webp 500w"
 media="(min-width: 35em)">
 '
 src="https://www.burgeonlab.com/posts/2024/speed-up-loading-times-wttr-neofetch/terminal.webp"
@@ -55,9 +130,9 @@ alt="screenshot of a macos terminal window with neofetch loaded, running an omz 
 &lt;img
 sizes="(min-width: 35em) 1080px, 100vw"
 srcset='
-source srcset="https://www.burgeonlab.com/posts/2024/speed-up-loading-times-wttr-neofetch/adams-code_hua01dca6c69a87e2afb8b5bc3103e9aaf_52056_500x0_resize_q75_h2_box_2.webp 500w"
+source srcset="https://www.burgeonlab.com/posts/2024/speed-up-loading-times-wttr-neofetch/adams-code_hu7773127098016919122.webp 500w"
 media="(min-width: 35em)">
-source srcset="https://www.burgeonlab.com/posts/2024/speed-up-loading-times-wttr-neofetch/adams-code_hua01dca6c69a87e2afb8b5bc3103e9aaf_52056_1080x0_resize_q75_h2_box_2.webp 1080w"
+source srcset="https://www.burgeonlab.com/posts/2024/speed-up-loading-times-wttr-neofetch/adams-code_hu16491669061338341653.webp 1080w"
 media="(min-width: 35em)">
 '
 src="https://www.burgeonlab.com/posts/2024/speed-up-loading-times-wttr-neofetch/adams-code.webp"
@@ -1058,7 +1133,7 @@ alt="Screenshot of Adamsdesk&amp;#39;s BASH script">
 &lt;img
 sizes="(min-width: 35em) 1080px, 100vw"
 srcset='
-source srcset="https://www.burgeonlab.com/posts/2023/hugo-scroll-to-top/button_hu837357d94442063c22c0383e60e9162e_11666_500x0_resize_q75_h2_box_2.webp 500w"
+source srcset="https://www.burgeonlab.com/posts/2023/hugo-scroll-to-top/button_hu9571689220139417255.webp 500w"
 media="(min-width: 35em)">
 '
 src="https://www.burgeonlab.com/posts/2023/hugo-scroll-to-top/button.webp"
@@ -1076,7 +1151,7 @@ alt="Screenshot of scroll to top button on Hugo blog">
 &lt;img
 sizes="(min-width: 35em) 1080px, 100vw"
 srcset='
-source srcset="https://www.burgeonlab.com/posts/2023/dietpi-on-ssd/title_huce33f2e11332cf9c86c7f22ec4dd5b12_30354_500x0_resize_q75_h2_box_2.webp 500w"
+source srcset="https://www.burgeonlab.com/posts/2023/dietpi-on-ssd/title_hu14433048063786220402.webp 500w"
 media="(min-width: 35em)">
 '
 src="https://www.burgeonlab.com/posts/2023/dietpi-on-ssd/title.webp"
@@ -1091,7 +1166,7 @@ alt="ALT TEXT HERE">
 &lt;img
 sizes="(min-width: 35em) 1080px, 100vw"
 srcset='
-source srcset="https://www.burgeonlab.com/posts/2023/dietpi-on-ssd/enclosure_hu02dd4917b394f354624278be3bf56879_15264_500x0_resize_q75_h2_box_2.webp 500w"
+source srcset="https://www.burgeonlab.com/posts/2023/dietpi-on-ssd/enclosure_hu7187721430344798252.webp 500w"
 media="(min-width: 35em)">
 '
 src="https://www.burgeonlab.com/posts/2023/dietpi-on-ssd/enclosure.webp"
@@ -1099,7 +1174,7 @@ alt="UGREEN 2.5 inch SATA drive USB Enclosure">
 &lt;img
 sizes="(min-width: 35em) 1080px, 100vw"
 srcset='
-source srcset="https://www.burgeonlab.com/posts/2023/dietpi-on-ssd/enclosure_spec_hu0decaaa4abc7f1a45fd0859ee4d8ae8c_28060_500x0_resize_q75_h2_box_2.webp 500w"
+source srcset="https://www.burgeonlab.com/posts/2023/dietpi-on-ssd/enclosure_spec_hu4403925758901629113.webp 500w"
 media="(min-width: 35em)">
 '
 src="https://www.burgeonlab.com/posts/2023/dietpi-on-ssd/enclosure_spec.webp"
@@ -1116,7 +1191,7 @@ alt="Specification of aluminium usb SSD enclosure">
 &lt;img
 sizes="(min-width: 35em) 1080px, 100vw"
 srcset='
-source srcset="https://www.burgeonlab.com/posts/2023/dietpi-on-ssd/dietpi_software_hu8010a8e4f5b36558ccd02d30517d674d_47602_500x0_resize_q75_h2_box_2.webp 500w"
+source srcset="https://www.burgeonlab.com/posts/2023/dietpi-on-ssd/dietpi_software_hu15110913308873156256.webp 500w"
 media="(min-width: 35em)">
 '
 src="https://www.burgeonlab.com/posts/2023/dietpi-on-ssd/dietpi_software.webp"
@@ -1141,9 +1216,9 @@ alt="Software to be installed on the DietPi distro for Raspberry Pi 4B">
 &lt;img
 sizes="(min-width: 35em) 1080px, 100vw"
 srcset='
-source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/macmini_geniusbar_hub300bdf4021a51e9f447338cba8eb4a4_95972_500x0_resize_q75_h2_box_2.webp 500w"
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/macmini_geniusbar_hu5185535443573284534.webp 500w"
 media="(min-width: 35em)">
-source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/macmini_geniusbar_hub300bdf4021a51e9f447338cba8eb4a4_95972_1080x0_resize_q75_h2_box_2.webp 1080w"
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/macmini_geniusbar_hu124577211150624309.webp 1080w"
 media="(min-width: 35em)">
 '
 src="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/macmini_geniusbar.webp"
@@ -1154,7 +1229,7 @@ alt="At the Apple Genius Bar">
 &lt;img
 sizes="(min-width: 35em) 1080px, 100vw"
 srcset='
-source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/ssd_health_hu42a21aa5f63b52e40044d0f5b428e2dd_61030_500x0_resize_q75_h2_box_2.webp 500w"
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/ssd_health_hu12310539076711274395.webp 500w"
 media="(min-width: 35em)">
 '
 src="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/ssd_health.webp"
@@ -1177,11 +1252,11 @@ alt="Smartctl results of the 2012 MacBook Air">
 &lt;img
 sizes="(min-width: 35em) 1080px, 100vw"
 srcset='
-source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/memfail_m1_hua5369822d9f3b3c887b4f3d241522b93_43632_500x0_resize_q75_h2_box_2.webp 500w"
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/memfail_m1_hu16393123161469529705.webp 500w"
 media="(min-width: 35em)">
-source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/memfail_m1_hua5369822d9f3b3c887b4f3d241522b93_43632_1080x0_resize_q75_h2_box_2.webp 1080w"
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/memfail_m1_hu1560684998237204969.webp 1080w"
 media="(min-width: 35em)">
-source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/memfail_m1_hua5369822d9f3b3c887b4f3d241522b93_43632_1500x0_resize_q75_h2_box_2.webp 1500w"
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/memfail_m1_hu389002106568799067.webp 1500w"
 media="(min-width: 35em)">
 '
 src="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/memfail_m1.webp"
@@ -1201,11 +1276,11 @@ alt="Mac Mini M1 Diagnostic Scan">
 &lt;img
 sizes="(min-width: 35em) 1080px, 100vw"
 srcset='
-source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/dust_before_huf4b8ce38111f3e35917ad241d4544365_430376_500x0_resize_q75_h2_box_2.webp 500w"
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/dust_before_hu14817389405707673.webp 500w"
 media="(min-width: 35em)">
-source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/dust_before_huf4b8ce38111f3e35917ad241d4544365_430376_1080x0_resize_q75_h2_box_2.webp 1080w"
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/dust_before_hu10473083115469766641.webp 1080w"
 media="(min-width: 35em)">
-source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/dust_before_huf4b8ce38111f3e35917ad241d4544365_430376_1500x0_resize_q75_h2_box_2.webp 1500w"
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/dust_before_hu16669450093584704985.webp 1500w"
 media="(min-width: 35em)">
 '
 src="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/dust_before.webp"
@@ -1213,11 +1288,11 @@ alt="11 year old crud">
 &lt;img
 sizes="(min-width: 35em) 1080px, 100vw"
 srcset='
-source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/dust_after_huadc4f7e44d53af7bc8c55ab08793d647_414164_500x0_resize_q75_h2_box_2.webp 500w"
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/dust_after_hu11635187535650773878.webp 500w"
 media="(min-width: 35em)">
-source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/dust_after_huadc4f7e44d53af7bc8c55ab08793d647_414164_1080x0_resize_q75_h2_box_2.webp 1080w"
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/dust_after_hu1027815264870763371.webp 1080w"
 media="(min-width: 35em)">
-source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/dust_after_huadc4f7e44d53af7bc8c55ab08793d647_414164_1500x0_resize_q75_h2_box_2.webp 1500w"
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/dust_after_hu2178696941598432780.webp 1500w"
 media="(min-width: 35em)">
 '
 src="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/dust_after.webp"
@@ -1227,11 +1302,11 @@ alt="After cleaning my 2012 MacBook Air">&lt;/p>
 &lt;img
 sizes="(min-width: 35em) 1080px, 100vw"
 srcset='
-source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/rpi_dual_fan_hub5275651b4ba60dc532f182f54915cbe_359714_500x0_resize_q75_h2_box_2.webp 500w"
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/rpi_dual_fan_hu13158278814836931033.webp 500w"
 media="(min-width: 35em)">
-source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/rpi_dual_fan_hub5275651b4ba60dc532f182f54915cbe_359714_1080x0_resize_q75_h2_box_2.webp 1080w"
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/rpi_dual_fan_hu18294306387738331891.webp 1080w"
 media="(min-width: 35em)">
-source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/rpi_dual_fan_hub5275651b4ba60dc532f182f54915cbe_359714_1500x0_resize_q75_h2_box_2.webp 1500w"
+source srcset="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/rpi_dual_fan_hu7043477092621530837.webp 1500w"
 media="(min-width: 35em)">
 '
 src="https://www.burgeonlab.com/posts/2023/sudden-influx-of-new-gear/rpi_dual_fan.webp"
@@ -1255,9 +1330,9 @@ alt="Yurobot dual fan attachment with LED for the Raspberry Pi 4B">
 &lt;img
 sizes="(min-width: 35em) 1080px, 100vw"
 srcset='
-source srcset="https://www.burgeonlab.com/posts/2023/hello-hugo/hello-hugo-cover_hu0fe8d66c2d1ee37fbfd6786db938cc92_293388_500x0_resize_q75_h2_box_2.webp 500w"
+source srcset="https://www.burgeonlab.com/posts/2023/hello-hugo/hello-hugo-cover_hu6642813821373626513.webp 500w"
 media="(min-width: 35em)">
-source srcset="https://www.burgeonlab.com/posts/2023/hello-hugo/hello-hugo-cover_hu0fe8d66c2d1ee37fbfd6786db938cc92_293388_1080x0_resize_q75_h2_box_2.webp 1080w"
+source srcset="https://www.burgeonlab.com/posts/2023/hello-hugo/hello-hugo-cover_hu5090907191093162730.webp 1080w"
 media="(min-width: 35em)">
 '
 src="https://www.burgeonlab.com/posts/2023/hello-hugo/hello-hugo-cover.webp"
