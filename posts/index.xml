@@ -1,64 +1,1576 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Burgeon Lab—Where Projects Prosper</title><link>https://www.burgeonlab.com/posts/</link><description>Recent content in Posts on Burgeon Lab—Where Projects Prosper</description><generator>Hugo</generator><language>en</language><lastBuildDate>Mon, 14 Apr 2025 18:02:37 +0800</lastBuildDate><atom:link href="https://www.burgeonlab.com/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>SSH into KOreader (Kobo Aura One) from macOS</title><link>https://www.burgeonlab.com/2024/ssh-into-koreader-kobo-aura-one-from-macos/</link><pubDate>Thu, 22 Aug 2024 17:43:11 +0800</pubDate><guid>https://www.burgeonlab.com/2024/ssh-into-koreader-kobo-aura-one-from-macos/</guid><description>&lt;h2 id="background">Background&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Burgeon Lab</title><link>/posts/</link><description>Burgeon Lab (Posts)</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 06 Apr 2025 22:20:14 +0800</lastBuildDate><atom:link href="/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>SSH into KOreader (Kobo Aura One) from macOS</title><link>/2024/ssh-into-koreader-kobo-aura-one-from-macos/</link><pubDate>Thu, 22 Aug 2024 17:43:11 +0800</pubDate><guid>/2024/ssh-into-koreader-kobo-aura-one-from-macos/</guid><description>&lt;h2 id="background" >
+&lt;div>
+&lt;a href="#background">
+#
+&lt;/a>
+Background
+&lt;/div>
+&lt;/h2>
 &lt;p>I bought my first e-reader (a Kobo Aura One Limited Edition) &lt;a href="https://eclecticpassions.net/blog/refurbished-ereader-kobo-aura-one/">recently&lt;/a> and right away I chose &lt;a href="http://koreader.rocks/">KOReader&lt;/a> as my main software to read and manage my ebooks. KOReader allows for direct USB transfer, Calibre wireless transfer and also SSH. It was easy to use the former two options but I had trouble using SSH to connect to the Kobo using my Mac (on Sonoma 14.6.1) despite following the &lt;a href="https://github.com/koreader/koreader/wiki/SSH">instructions&lt;/a>.&lt;/p>
-&lt;h2 id="problem">Problem&lt;/h2>
-&lt;p>Even with the two &amp;ldquo;workarounds&amp;rdquo; listed, I was not able to connect. The two workarounds offered are:&lt;/p></description></item><item><title>Fixing TOC Anchor Links Behind Top Navigation Header in Hugo</title><link>https://www.burgeonlab.com/2024/fixing-toc-anchor-links-behind-top-navigation-header-in-hugo/</link><pubDate>Fri, 05 Apr 2024 11:51:56 +0800</pubDate><guid>https://www.burgeonlab.com/2024/fixing-toc-anchor-links-behind-top-navigation-header-in-hugo/</guid><description>&lt;h2 id="the-problem-at-hand">The Problem At Hand&lt;/h2>
+&lt;h2 id="problem" >
+&lt;div>
+&lt;a href="#problem">
+#
+&lt;/a>
+Problem
+&lt;/div>
+&lt;/h2>
+&lt;p>Even with the two &amp;ldquo;workarounds&amp;rdquo; listed, I was not able to connect. The two workarounds offered are:&lt;/p>
+&lt;ol>
+&lt;li>When scp fails use: &lt;code>cat src_file | ssh -T -x -p 2222 user@ip 'cat &amp;gt; dst_file'&lt;/code>&lt;/li>
+&lt;li>Or use &lt;a href="https://github.com/thomasrebele/lsyncd-workaround">lysncd-workaround&lt;/a> as a scp or rsync replacement for when remote doesn&amp;rsquo;t support scp or rsync.&lt;/li>
+&lt;/ol>
+&lt;h2 id="fix" >
+&lt;div>
+&lt;a href="#fix">
+#
+&lt;/a>
+Fix
+&lt;/div>
+&lt;/h2>
+&lt;p>It took me some trial and error to get lysncd to work and transfer files over via SSH to the Kobo, but it&amp;rsquo;s a great alternative to Calibre wireless transfer now that I have it sorted. Here are detailed instructions on how to use lysncd with KOReader SSH mode on a Mac to transfer ebooks (or any other file) to your ereader wirelessly with a CLI.&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>Install lysncd &lt;code>brew install lsyncd&lt;/code>.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Make a config file (in lua syntax), call it &lt;code>.no-tty.lsync&lt;/code> by &lt;code>touch .no-tty.lsync&lt;/code> and then open the file with your preferred text editor - I use VSCodium. Change the language mode to .lua. (I made it a hidden file by adding the dot to the front. It&amp;rsquo;s up to you.) Paste in the template below, I added some notes to explain the variables.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Save the config file in the working directory &lt;code>cd /Users/JohnDoe/Documents/KoboKOReader/.no-tty.lsync&lt;/code>.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Turn on WiFi and SSH mode (no password if on safe/home network, turn off immediately after done with transfer) in KOReader on the Kobo. Set a unique port number and note down the IP address in the popup window.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>In your working directory, run &lt;code>sudo lsyncd .no-tty.lsync&lt;/code> Remember to type &lt;code>sudo&lt;/code> because it doesn&amp;rsquo;t work and throws an error without it. &lt;code>&amp;quot;Cannot access /dev/fsevents monitor! (1: Operation not permitted)&amp;quot;&lt;/code>.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>If for some reason it is still not working, try giving terminal.app full device access in System Settings &amp;gt; Privacy &amp;amp; Security &amp;gt; Full Disk Access &amp;gt; add Terminal.app. Restart terminal. and repeat step 5.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Whatever is in the source directory will be synced over. Once that has completed, click &lt;code>ctrl+c&lt;/code> to end the process.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Remember to keep WiFi on and do not allow the Kobo to sleep during transfer.&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#fff;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-lua" data-lang="lua">&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>settings {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> logfile &lt;span style="color:#00d3d0">=&lt;/span> &lt;span style="color:#79a8ff">&amp;#34;/dev/stdout&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> nodaemon &lt;span style="color:#00d3d0">=&lt;/span> &lt;span style="color:#00bcff">true&lt;/span>, &lt;span style="color:#a8a8a8">-- If you started lsyncd in the foreground (for example, with nodaemon set to true), you can stop it by pressing Ctrl+C in the terminal where it is running. This will send an interrupt signal to lsyncd, causing it to terminate.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> inotifyMode &lt;span style="color:#00d3d0">=&lt;/span> &lt;span style="color:#79a8ff">&amp;#34;Polling&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> port &lt;span style="color:#00d3d0">=&lt;/span> &lt;span style="color:#00bcff">1234&lt;/span> &lt;span style="color:#a8a8a8">-- Enter port set on KOReader network ssh settings&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> remote &lt;span style="color:#00d3d0">=&lt;/span> &lt;span style="color:#79a8ff">&amp;#34;root@192.169.1.1&amp;#34;&lt;/span> &lt;span style="color:#a8a8a8">-- Enter ip address for KOReader when you turn on ssh mode&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ensure_target &lt;span style="color:#00d3d0">=&lt;/span> &lt;span style="color:#b6a0ff">function&lt;/span>(event)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">local&lt;/span> cmd &lt;span style="color:#00d3d0">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a8a8a8">-- connect to server and go to dst dir&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#79a8ff">&amp;#39;sh -c &lt;/span>&lt;span style="color:#79a8ff">\&amp;#39;&lt;/span>&lt;span style="color:#79a8ff">ssh -T -x -p &amp;#39;&lt;/span>&lt;span style="color:#00d3d0">..&lt;/span>port&lt;span style="color:#00d3d0">..&lt;/span>&lt;span style="color:#79a8ff">&amp;#39; &amp;#39;&lt;/span>&lt;span style="color:#00d3d0">..&lt;/span>remote&lt;span style="color:#00d3d0">..&lt;/span>&lt;span style="color:#79a8ff">&amp;#39; &amp;#34;sh -c &lt;/span>&lt;span style="color:#79a8ff">\\\&amp;#34;&lt;/span>&lt;span style="color:#79a8ff">mkdir -p &lt;/span>&lt;span style="color:#79a8ff">\\\\\\\&amp;#34;&lt;/span>&lt;span style="color:#79a8ff">&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00d3d0">..&lt;/span>event.target&lt;span style="color:#00d3d0">..&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a8a8a8">-- write files&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#79a8ff">&amp;#39;&lt;/span>&lt;span style="color:#79a8ff">\\\\\\\&amp;#34;&lt;/span>&lt;span style="color:#79a8ff"> &lt;/span>&lt;span style="color:#79a8ff">\\\&amp;#34;&lt;/span>&lt;span style="color:#79a8ff"> &amp;#34; &lt;/span>&lt;span style="color:#79a8ff">\&amp;#39;&lt;/span>&lt;span style="color:#79a8ff">&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> os.execute(cmd)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">end&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> up &lt;span style="color:#00d3d0">=&lt;/span> &lt;span style="color:#b6a0ff">function&lt;/span>(event)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">local&lt;/span> cmd &lt;span style="color:#00d3d0">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a8a8a8">-- go to src dir&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#79a8ff">&amp;#39;sh -c &lt;/span>&lt;span style="color:#79a8ff">\&amp;#39;&lt;/span>&lt;span style="color:#79a8ff">cd &amp;#34;&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00d3d0">..&lt;/span>event.source&lt;span style="color:#00d3d0">..&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a8a8a8">-- read files&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#79a8ff">&amp;#39;&amp;#34;; tar cf - &amp;#34;./&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00d3d0">..&lt;/span>event.path&lt;span style="color:#00d3d0">..&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a8a8a8">-- connect to server and go to dst dir&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#79a8ff">&amp;#39;&amp;#34; | ssh -T -x -p &amp;#39;&lt;/span>&lt;span style="color:#00d3d0">..&lt;/span>port&lt;span style="color:#00d3d0">..&lt;/span>&lt;span style="color:#79a8ff">&amp;#39; &amp;#39;&lt;/span>&lt;span style="color:#00d3d0">..&lt;/span>remote&lt;span style="color:#00d3d0">..&lt;/span>&lt;span style="color:#79a8ff">&amp;#39; &amp;#34;sh -c &lt;/span>&lt;span style="color:#79a8ff">\\\&amp;#34;&lt;/span>&lt;span style="color:#79a8ff">cd &lt;/span>&lt;span style="color:#79a8ff">\\\\\\\&amp;#34;&lt;/span>&lt;span style="color:#79a8ff">&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00d3d0">..&lt;/span>event.target&lt;span style="color:#00d3d0">..&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a8a8a8">-- write files&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#79a8ff">&amp;#39;&lt;/span>&lt;span style="color:#79a8ff">\\\\\\\&amp;#34;&lt;/span>&lt;span style="color:#79a8ff">; tar xvf -&lt;/span>&lt;span style="color:#79a8ff">\\\&amp;#34;&lt;/span>&lt;span style="color:#79a8ff"> &amp;#34; &lt;/span>&lt;span style="color:#79a8ff">\&amp;#39;&lt;/span>&lt;span style="color:#79a8ff">&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> spawnShell(event, cmd)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">end&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> bash &lt;span style="color:#00d3d0">=&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> maxProcesses &lt;span style="color:#00d3d0">=&lt;/span> &lt;span style="color:#00bcff">2&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> onCreate &lt;span style="color:#00d3d0">=&lt;/span> up,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> onModify &lt;span style="color:#00d3d0">=&lt;/span> up,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> onDelete &lt;span style="color:#00d3d0">=&lt;/span> &lt;span style="color:#79a8ff">&amp;#34;echo &amp;#39;deletion not supported: ^targetPathname&amp;#39;&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> onMove &lt;span style="color:#00d3d0">=&lt;/span> &lt;span style="color:#79a8ff">&amp;#34;mv ^o.targetPathname ^d.targetPathname&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> onStartup &lt;span style="color:#00d3d0">=&lt;/span> &lt;span style="color:#b6a0ff">function&lt;/span>(event)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ensure_target(event)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> up(event)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">end&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> sync{bash,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> source&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;/Users/JohnDoe/Documents/KoboKOReader/&amp;#34;&lt;/span>, &lt;span style="color:#a8a8a8">-- Files in this directory will be copied over to the target destination whenever lsycnd is running, ctrl+c to end process&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> target&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;/mnt/onboard/destination_folder_name&amp;#34;&lt;/span>, &lt;span style="color:#a8a8a8">-- Files from source directory (above) will be copied over to this target destination&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Hope this helps! Happy reading with KOReader.&lt;/p></description></item><item><title>Fixing TOC Anchor Links Behind Top Navigation Header in Hugo</title><link>/2024/fixing-toc-anchor-links-behind-top-navigation-header-in-hugo/</link><pubDate>Fri, 05 Apr 2024 11:51:56 +0800</pubDate><guid>/2024/fixing-toc-anchor-links-behind-top-navigation-header-in-hugo/</guid><description>&lt;h2 id="the-problem-at-hand" >
+&lt;div>
+&lt;a href="#the-problem-at-hand">
+#
+&lt;/a>
+The Problem At Hand
+&lt;/div>
+&lt;/h2>
 &lt;p>My current Hugo theme is &lt;a href="https://github.com/lxndrblz/anatole">Anatole&lt;/a> and I have only been using HTML and CSS to customize the site.&lt;/p>
-&lt;p>Today, I will go through a very simple way of adding some padding to the top of page while the top navigation header bar is present (i.e., when using a desktop browser or when the window is wider than 945px). It does not add any visible padding, only functionally, by adding a padding to the top of the page.&lt;/p></description></item><item><title>Customizing Neofetch: Load Weather Data Faster</title><link>https://www.burgeonlab.com/2024/customizing-neofetch-load-weather-data-faster/</link><pubDate>Sat, 30 Mar 2024 14:34:25 +0800</pubDate><guid>https://www.burgeonlab.com/2024/customizing-neofetch-load-weather-data-faster/</guid><description>&lt;h2 id="my-terminal-setup">My Terminal Setup&lt;/h2>
-
-
-
- 
- 
- 
-
- 
- 
-
- 
-
- &lt;img src="https://www.burgeonlab.com/2024/customizing-neofetch-load-weather-data-faster/terminal.webp" alt="screenshot of a macos terminal window with neofetch loaded, running an omz theme.">
-
-
+&lt;p>Today, I will go through a very simple way of adding some padding to the top of page while the top navigation header bar is present (i.e., when using a desktop browser or when the window is wider than 945px). It does not add any visible padding, only functionally, by adding a padding to the top of the page.&lt;/p>
+&lt;p>This is to fix the issue of the subheadings hiding behind the sticky header when it is clicked from the anchor links in the table of contents (TOC).&lt;/p>
+&lt;h2 id="easiest-fix-with-only-css" >
+&lt;div>
+&lt;a href="#easiest-fix-with-only-css">
+#
+&lt;/a>
+Easiest Fix With Only CSS
+&lt;/div>
+&lt;/h2>
+&lt;p>By adding this css code to your custom.css stylesheet, you can account for the height of the top navigation bar when clicking on the header links from the table of contents.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#fff;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-css" data-lang="css">&lt;span style="display:flex;">&lt;span> html {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> scroll-padding-top: &lt;span style="color:#00bcff">8&lt;/span>&lt;span style="color:#6ae4b9">%&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="a-slightly-more-sophisticated-fix" >
+&lt;div>
+&lt;a href="#a-slightly-more-sophisticated-fix">
+##
+&lt;/a>
+A Slightly More Sophisticated Fix
+&lt;/div>
+&lt;/h3>
+&lt;p>This could work if your site doesn&amp;rsquo;t have a mobile view. But if there is a separate mobile layout for the site, e.g., the top nav bar disappears into a burger side menu or the bar is thinner than the desktop version, we can use @media queries to add breakpoints to have it respond differently on different screen sizes. You can read more about &lt;a href="https://www.w3schools.com/howto/howto_css_media_query_breakpoints.asp">typical device breakpoints here&lt;/a>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#fff;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-css" data-lang="css">&lt;span style="display:flex;">&lt;span>@&lt;span style="color:#b6a0ff">media&lt;/span> only screen and &lt;span style="color:#00d3d0">(&lt;/span>max-width&lt;span style="color:#00d3d0">:&lt;/span> 946px&lt;span style="color:#00d3d0">)&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> html {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> scroll-padding-top: &lt;span style="color:#00bcff">2&lt;/span>&lt;span style="color:#6ae4b9">%&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>@&lt;span style="color:#b6a0ff">media&lt;/span> only screen and &lt;span style="color:#00d3d0">(&lt;/span>min-width&lt;span style="color:#00d3d0">:&lt;/span> 946px&lt;span style="color:#00d3d0">)&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> html {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> scroll-padding-top: &lt;span style="color:#00bcff">8&lt;/span>&lt;span style="color:#6ae4b9">%&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>On my current theme, when the window goes below 945px, the top navigation bar disappears. If I didn&amp;rsquo;t add these @media queries, whenever the site is on mobile view, the TOC links will jump lower than expected as the bar is not in the way. Hence it is set at 2% only when it is on mobile / smaller windows.&lt;/p>
+&lt;p>I hope this is easy enough to understand! I am glad I didn&amp;rsquo;t need to mess with anchor classes or id as some other blogs recommended.&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>&lt;sup id="fnref:2">&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref">2&lt;/a>&lt;/sup>&lt;/p>
+&lt;div class="footnotes" role="doc-endnotes">
+&lt;hr>
+&lt;ol>
+&lt;li id="fn:1">
+&lt;p>&lt;a href="https://calvinke.com/seo/fixed-header-anchor-css/">https://calvinke.com/seo/fixed-header-anchor-css/&lt;/a>&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:2">
+&lt;p>&lt;a href="https://getpublii.com/blog/one-line-css-solution-to-prevent-anchor-links-from-scrolling-behind-a-sticky-header.html">https://getpublii.com/blog/one-line-css-solution-to-prevent-anchor-links-from-scrolling-behind-a-sticky-header.html&lt;/a>&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/div></description></item><item><title>Customizing Neofetch: Load Weather Data Faster</title><link>/2024/customizing-neofetch-load-weather-data-faster/</link><pubDate>Sat, 30 Mar 2024 14:34:25 +0800</pubDate><guid>/2024/customizing-neofetch-load-weather-data-faster/</guid><description>&lt;h2 id="my-terminal-setup" >
+&lt;div>
+&lt;a href="#my-terminal-setup">
+#
+&lt;/a>
+My Terminal Setup
+&lt;/div>
+&lt;/h2>
+&lt;img src="https://www.burgeonlab.com/2024/customizing-neofetch-load-weather-data-faster/terminal.webp" alt="screenshot of a macos terminal window with neofetch loaded, running an omz theme.">
 &lt;p>I customized my MacOS terminal with &lt;a href="https://ohmyz.sh/">OMZ&lt;/a>. In the process, I learnt an awful lot about the ins and outs of config files, navigating a project&amp;rsquo;s &lt;a href="https://github.com/ohmyzsh/ohmyzsh">GitHub page&lt;/a> and how to use &lt;a href="https://www.nano-editor.org/">Nano&lt;/a> (but eventually switching to using &lt;a href="https://vscodium.com/">VSCodium&lt;/a> as my main text editor).&lt;/p>
-&lt;p>For the colour theme, &lt;a href="https://github.com/lysyi3m/macos-terminal-themes">this GitHub page&lt;/a> has a lot to choose from for the default macOS Terminal app.&lt;/p></description></item><item><title>Mac Mini M1 Problems</title><link>https://www.burgeonlab.com/2023/mac-mini-m1-problems/</link><pubDate>Wed, 13 Dec 2023 12:09:15 +0800</pubDate><guid>https://www.burgeonlab.com/2023/mac-mini-m1-problems/</guid><description>&lt;h2 id="troubleshooting-notes">Troubleshooting notes&lt;/h2>
+&lt;p>For the colour theme, &lt;a href="https://github.com/lysyi3m/macos-terminal-themes">this GitHub page&lt;/a> has a lot to choose from for the default macOS Terminal app.&lt;/p>
+&lt;h2 id="neofetch" >
+&lt;div>
+&lt;a href="#neofetch">
+#
+&lt;/a>
+Neofetch
+&lt;/div>
+&lt;/h2>
+&lt;p>While I was looking for cool terminal setups for inspiration, I came across this popular command-line tool called &lt;a href="https://github.com/dylanaraps/neofetch">Neofetch&lt;/a>. It shows a summary of the machine specs with a ASCII logo of the current OS (or any other custom ASCII).&lt;/p>
+&lt;p>I have made customizations using the config file, which is located in &lt;code>${HOME}/.config/Neofetch/config.conf&lt;/code>, to display only a few of the defaults, e.g. OS version, RAM, CPU usage and uptime. &lt;em>(My config.conf file is at the end of the post for reference.)&lt;/em>&lt;/p>
+&lt;h3 id="displaying-the-current-weather" >
+&lt;div>
+&lt;a href="#displaying-the-current-weather">
+##
+&lt;/a>
+Displaying the Current Weather
+&lt;/div>
+&lt;/h3>
+&lt;p>The most interesting feature for me is to see the current weather. Originally, I have followed the official documentation to add a one-liner to load the weather of my current location via wttr.in.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#fff;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>prin &lt;span style="color:#79a8ff">&amp;#34;Weather&amp;#34;&lt;/span> &lt;span style="color:#79a8ff">&amp;#34;&lt;/span>&lt;span style="color:#b6a0ff">$(&lt;/span>curl wttr.in/?0?q?T | awk &lt;span style="color:#79a8ff">&amp;#39;/°(C|F)/ {printf $(NF-1) $(NF) &amp;#34; (&amp;#34;a&amp;#34;)&amp;#34;} /,/ {a=$0}&amp;#39;&lt;/span>&lt;span style="color:#b6a0ff">)&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="delay-in-loading" >
+&lt;div>
+&lt;a href="#delay-in-loading">
+##
+&lt;/a>
+Delay in Loading
+&lt;/div>
+&lt;/h3>
+&lt;p>But because I have set Neofetch to run on every new terminal instance, I noticed how there&amp;rsquo;s a significant delay each time it tried fetching the current weather condition. I googled to see if there was anyone having similar issues and I found a guy called &lt;a href="https://www.adamsdesk.com/posts/neofetch-weather-data-caching/">Adam&lt;/a> with the same problem. He wrote a BASH script that would cache the weather forecast hourly in a .txt file, so Neofetch wouldn&amp;rsquo;t try to fetch the data constantly.&lt;/p>
+&lt;img src="https://www.burgeonlab.com/2024/customizing-neofetch-load-weather-data-faster/adams-code.webp" alt="Screenshot of Adamsdesk&amp;#39;s BASH script">
+&lt;p>Caption: &lt;em>Screenshot of Adam&amp;rsquo;s script.&lt;/em>&lt;/p>
+&lt;p>Unfortunately, the code he shared didn&amp;rsquo;t work for me. It only worked on the first run, i.e., when the cached .txt file didn&amp;rsquo;t exist. Once it was present with the current weather data, it wasn&amp;rsquo;t able to update after the chosen duration has passed (e.g.set to one hour or 3600s).&lt;/p>
+&lt;h3 id="modified-bash-script-to-cache-weather-data" >
+&lt;div>
+&lt;a href="#modified-bash-script-to-cache-weather-data">
+##
+&lt;/a>
+Modified BASH Script to Cache Weather Data
+&lt;/div>
+&lt;/h3>
+&lt;p>I therefore modified his code to add a last retrieval time.txt in the process; using that to calculate the time difference instead of the last modified time of the cached weather.txt file. I also changed the refresh rate to 7200 (two hours).&lt;/p>
+&lt;p>The modified code is as follows:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#fff;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>getWeather&lt;span style="color:#00d3d0">()&lt;/span> &lt;span style="color:#00d3d0">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00d3d0">weather_params&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;tai+po?format=&amp;#34;&lt;/span>%c+%C+%t+&lt;span style="color:#79a8ff">&amp;#34;(&amp;#34;&lt;/span>%f&lt;span style="color:#79a8ff">&amp;#34;)&amp;#34;&lt;/span>+%h&lt;span style="color:#79a8ff">&amp;#34;RH&amp;#34;&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00d3d0">data_path&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;&lt;/span>&lt;span style="color:#00d3d0">$HOME&lt;/span>&lt;span style="color:#79a8ff">/.config/neofetch/data-weather.txt&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00d3d0">last_retrieval_path&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;&lt;/span>&lt;span style="color:#00d3d0">$HOME&lt;/span>&lt;span style="color:#79a8ff">/.config/neofetch/last-retrieval.txt&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00d3d0">duration&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#00bcff">7200&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a8a8a8"># Check if the last retrieval time file exists&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">if&lt;/span> &lt;span style="color:#00d3d0">[[&lt;/span> -e &lt;span style="color:#79a8ff">&amp;#34;&lt;/span>&lt;span style="color:#00d3d0">$last_retrieval_path&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;&lt;/span> &lt;span style="color:#00d3d0">]]&lt;/span>; &lt;span style="color:#b6a0ff">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00d3d0">last_retrieval&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#b6a0ff">$(&lt;/span>cat &lt;span style="color:#79a8ff">&amp;#34;&lt;/span>&lt;span style="color:#00d3d0">$last_retrieval_path&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;&lt;/span>&lt;span style="color:#b6a0ff">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a8a8a8"># Calculate the time elapsed since the last retrieval&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00d3d0">current_time&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#b6a0ff">$(&lt;/span>date +%s&lt;span style="color:#b6a0ff">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00d3d0">time_elapsed&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#b6a0ff">$((&lt;/span>current_time &lt;span style="color:#00d3d0">-&lt;/span> last_retrieval&lt;span style="color:#b6a0ff">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a8a8a8"># Compare the time elapsed with the duration&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">if&lt;/span> &lt;span style="color:#00d3d0">((&lt;/span>time_elapsed &amp;gt;&lt;span style="color:#00d3d0">=&lt;/span> duration&lt;span style="color:#00d3d0">))&lt;/span>; &lt;span style="color:#b6a0ff">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> getWeatherData
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> setWeatherData
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f78fe7">echo&lt;/span> &lt;span style="color:#79a8ff">&amp;#34;&lt;/span>&lt;span style="color:#00d3d0">$current_time&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;&lt;/span> &amp;gt; &lt;span style="color:#79a8ff">&amp;#34;&lt;/span>&lt;span style="color:#00d3d0">$last_retrieval_path&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> setWeatherData
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> getWeatherData
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> setWeatherData
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f78fe7">echo&lt;/span> &lt;span style="color:#79a8ff">&amp;#34;&lt;/span>&lt;span style="color:#b6a0ff">$(&lt;/span>date +%s&lt;span style="color:#b6a0ff">)&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;&lt;/span> &amp;gt; &lt;span style="color:#79a8ff">&amp;#34;&lt;/span>&lt;span style="color:#00d3d0">$last_retrieval_path&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> showWeatherData
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>setWeatherData&lt;span style="color:#00d3d0">()&lt;/span> &lt;span style="color:#00d3d0">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00d3d0">weather_data&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#b6a0ff">$(&lt;/span>cat &lt;span style="color:#79a8ff">&amp;#34;&lt;/span>&lt;span style="color:#00d3d0">$data_path&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;&lt;/span>&lt;span style="color:#b6a0ff">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>getWeatherData&lt;span style="color:#00d3d0">()&lt;/span> &lt;span style="color:#00d3d0">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> curl -s &lt;span style="color:#79a8ff">&amp;#34;https://wttr.in/&lt;/span>&lt;span style="color:#00d3d0">$weather_params&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;&lt;/span> &amp;gt; &lt;span style="color:#79a8ff">&amp;#34;&lt;/span>&lt;span style="color:#00d3d0">$data_path&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>showWeatherData&lt;span style="color:#00d3d0">()&lt;/span> &lt;span style="color:#00d3d0">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> prin &lt;span style="color:#79a8ff">&amp;#34;Weather: &lt;/span>&lt;span style="color:#00d3d0">$weather_data&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Happy to say it&amp;rsquo;s all working fine now and loading much quicker than before. Hope this helps!&lt;/p>
+&lt;p>Shoutout to Adam Douglas at &lt;a href="https://www.adamsdesk.com/">adamsdesk&lt;/a>!&lt;/p>
+&lt;h2 id="addendum" >
+&lt;div>
+&lt;a href="#addendum">
+#
+&lt;/a>
+Addendum
+&lt;/div>
+&lt;/h2>
+&lt;h3 id="neofetchconfigconf" >
+&lt;div>
+&lt;a href="#neofetchconfigconf">
+##
+&lt;/a>
+neofetch/config.conf
+&lt;/div>
+&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#fff;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>print_info&lt;span style="color:#00d3d0">()&lt;/span> &lt;span style="color:#00d3d0">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> info &lt;span style="color:#79a8ff">&amp;#34;OS&amp;#34;&lt;/span> distro
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> info &lt;span style="color:#79a8ff">&amp;#34;Host&amp;#34;&lt;/span> model
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> info &lt;span style="color:#79a8ff">&amp;#34;CPU&amp;#34;&lt;/span> cpu
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> info &lt;span style="color:#79a8ff">&amp;#34;Shell&amp;#34;&lt;/span> shell
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> info &lt;span style="color:#79a8ff">&amp;#34;Uptime&amp;#34;&lt;/span> uptime
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> info &lt;span style="color:#79a8ff">&amp;#34;Packages&amp;#34;&lt;/span> packages
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> info &lt;span style="color:#79a8ff">&amp;#34;Terminal&amp;#34;&lt;/span> term
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> info underline
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> info &lt;span style="color:#79a8ff">&amp;#34;CPU Usage&amp;#34;&lt;/span> cpu_usage
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> info &lt;span style="color:#79a8ff">&amp;#34;Memory&amp;#34;&lt;/span> memory
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> info &lt;span style="color:#79a8ff">&amp;#34;Font&amp;#34;&lt;/span> font
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> info &lt;span style="color:#79a8ff">&amp;#34;Local IP&amp;#34;&lt;/span> local_ip
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> info underline
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> prin &lt;span style="color:#79a8ff">&amp;#34;Date: &lt;/span>&lt;span style="color:#b6a0ff">$(&lt;/span>date &lt;span style="color:#79a8ff">&amp;#39;+%a %Y-%m-%d&amp;#39;&lt;/span>&lt;span style="color:#b6a0ff">)&lt;/span>&lt;span style="color:#79a8ff"> UTC+8&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> getWeather
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> info cols
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>getWeather&lt;span style="color:#00d3d0">()&lt;/span> &lt;span style="color:#00d3d0">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00d3d0">weather_params&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;tai+po?format=&amp;#34;&lt;/span>%c+%C+%t+&lt;span style="color:#79a8ff">&amp;#34;(&amp;#34;&lt;/span>%f&lt;span style="color:#79a8ff">&amp;#34;)&amp;#34;&lt;/span>+%h&lt;span style="color:#79a8ff">&amp;#34;RH&amp;#34;&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00d3d0">data_path&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;&lt;/span>&lt;span style="color:#00d3d0">$HOME&lt;/span>&lt;span style="color:#79a8ff">/.config/neofetch/data-weather.txt&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00d3d0">last_retrieval_path&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;&lt;/span>&lt;span style="color:#00d3d0">$HOME&lt;/span>&lt;span style="color:#79a8ff">/.config/neofetch/last-retrieval.txt&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00d3d0">duration&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#00bcff">7200&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a8a8a8"># Check if the last retrieval time file exists&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">if&lt;/span> &lt;span style="color:#00d3d0">[[&lt;/span> -e &lt;span style="color:#79a8ff">&amp;#34;&lt;/span>&lt;span style="color:#00d3d0">$last_retrieval_path&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;&lt;/span> &lt;span style="color:#00d3d0">]]&lt;/span>; &lt;span style="color:#b6a0ff">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00d3d0">last_retrieval&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#b6a0ff">$(&lt;/span>cat &lt;span style="color:#79a8ff">&amp;#34;&lt;/span>&lt;span style="color:#00d3d0">$last_retrieval_path&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;&lt;/span>&lt;span style="color:#b6a0ff">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a8a8a8"># Calculate the time elapsed since the last retrieval&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00d3d0">current_time&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#b6a0ff">$(&lt;/span>date +%s&lt;span style="color:#b6a0ff">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00d3d0">time_elapsed&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#b6a0ff">$((&lt;/span>current_time &lt;span style="color:#00d3d0">-&lt;/span> last_retrieval&lt;span style="color:#b6a0ff">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a8a8a8"># Compare the time elapsed with the duration&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">if&lt;/span> &lt;span style="color:#00d3d0">((&lt;/span>time_elapsed &amp;gt;&lt;span style="color:#00d3d0">=&lt;/span> duration&lt;span style="color:#00d3d0">))&lt;/span>; &lt;span style="color:#b6a0ff">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> getWeatherData
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> setWeatherData
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f78fe7">echo&lt;/span> &lt;span style="color:#79a8ff">&amp;#34;&lt;/span>&lt;span style="color:#00d3d0">$current_time&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;&lt;/span> &amp;gt; &lt;span style="color:#79a8ff">&amp;#34;&lt;/span>&lt;span style="color:#00d3d0">$last_retrieval_path&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> setWeatherData
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> getWeatherData
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> setWeatherData
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f78fe7">echo&lt;/span> &lt;span style="color:#79a8ff">&amp;#34;&lt;/span>&lt;span style="color:#b6a0ff">$(&lt;/span>date +%s&lt;span style="color:#b6a0ff">)&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;&lt;/span> &amp;gt; &lt;span style="color:#79a8ff">&amp;#34;&lt;/span>&lt;span style="color:#00d3d0">$last_retrieval_path&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> showWeatherData
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>setWeatherData&lt;span style="color:#00d3d0">()&lt;/span> &lt;span style="color:#00d3d0">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00d3d0">weather_data&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#b6a0ff">$(&lt;/span>cat &lt;span style="color:#79a8ff">&amp;#34;&lt;/span>&lt;span style="color:#00d3d0">$data_path&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;&lt;/span>&lt;span style="color:#b6a0ff">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>getWeatherData&lt;span style="color:#00d3d0">()&lt;/span> &lt;span style="color:#00d3d0">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> curl -s &lt;span style="color:#79a8ff">&amp;#34;https://wttr.in/&lt;/span>&lt;span style="color:#00d3d0">$weather_params&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;&lt;/span> &amp;gt; &lt;span style="color:#79a8ff">&amp;#34;&lt;/span>&lt;span style="color:#00d3d0">$data_path&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>showWeatherData&lt;span style="color:#00d3d0">()&lt;/span> &lt;span style="color:#00d3d0">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> prin &lt;span style="color:#79a8ff">&amp;#34;Weather: &lt;/span>&lt;span style="color:#00d3d0">$weather_data&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Title&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Hide/Show Fully qualified domain name.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8">#&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;on&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --title_fqdn&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">title_fqdn&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;off&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Kernel&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Shorten the output of the kernel function.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;on&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;on&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --kernel_shorthand&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Supports: Everything except *BSDs (except PacBSD and PC-BSD)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># on: &amp;#39;4.8.9-1-ARCH&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># off: &amp;#39;Linux 4.8.9-1-ARCH&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">kernel_shorthand&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;on&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Distro&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Shorten the output of the distro function&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;on&amp;#39;, &amp;#39;tiny&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --distro_shorthand&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Supports: Everything except Windows and Haiku&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">distro_shorthand&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;tiny&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Show/Hide OS Architecture.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Show &amp;#39;x86_64&amp;#39;, &amp;#39;x86&amp;#39; and etc in &amp;#39;Distro:&amp;#39; output.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;on&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;on&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --os_arch&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># on: &amp;#39;Arch Linux x86_64&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># off: &amp;#39;Arch Linux&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">os_arch&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;on&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Uptime&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Shorten the output of the uptime function&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;on&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;on&amp;#39;, &amp;#39;tiny&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --uptime_shorthand&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># on: &amp;#39;2 days, 10 hours, 3 mins&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># tiny: &amp;#39;2d 10h 3m&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># off: &amp;#39;2 days, 10 hours, 3 minutes&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">uptime_shorthand&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;tiny&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Memory&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Show memory pecentage in output.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;on&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --memory_percent&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># on: &amp;#39;1801MiB / 7881MiB (22%)&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># off: &amp;#39;1801MiB / 7881MiB&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">memory_percent&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;on&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Change memory output unit.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;mib&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;kib&amp;#39;, &amp;#39;mib&amp;#39;, &amp;#39;gib&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --memory_unit&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># kib &amp;#39;1020928KiB / 7117824KiB&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># mib &amp;#39;1042MiB / 6951MiB&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># gib: &amp;#39; 0.98GiB / 6.79GiB&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">memory_unit&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;gib&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Packages&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Show/Hide Package Manager names.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;tiny&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;on&amp;#39;, &amp;#39;tiny&amp;#39; &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --package_managers&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># on: &amp;#39;998 (pacman), 8 (flatpak), 4 (snap)&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># tiny: &amp;#39;908 (pacman, flatpak, snap)&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># off: &amp;#39;908&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">package_managers&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;on&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Shell&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Show the path to $SHELL&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;on&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --shell_path&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># on: &amp;#39;/bin/bash&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># off: &amp;#39;bash&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">shell_path&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;off&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Show $SHELL version&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;on&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;on&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --shell_version&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># on: &amp;#39;bash 4.4.5&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># off: &amp;#39;bash&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">shell_version&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;on&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># CPU&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># CPU speed type&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;bios_limit&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;scaling_cur_freq&amp;#39;, &amp;#39;scaling_min_freq&amp;#39;, &amp;#39;scaling_max_freq&amp;#39;, &amp;#39;bios_limit&amp;#39;.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --speed_type&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Supports: Linux with &amp;#39;cpufreq&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># NOTE: Any file in &amp;#39;/sys/devices/system/cpu/cpu0/cpufreq&amp;#39; can be used as a value.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">speed_type&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;bios_limit&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># CPU speed shorthand&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;on&amp;#39;, &amp;#39;off&amp;#39;.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --speed_shorthand&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># NOTE: This flag is not supported in systems with CPU speed less than 1 GHz&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># on: &amp;#39;i7-6500U (4) @ 3.1GHz&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># off: &amp;#39;i7-6500U (4) @ 3.100GHz&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">speed_shorthand&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;off&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Enable/Disable CPU brand in output.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;on&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;on&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --cpu_brand&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># on: &amp;#39;Intel i7-6500U&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># off: &amp;#39;i7-6500U (4)&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">cpu_brand&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;on&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># CPU Speed&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Hide/Show CPU speed.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;on&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;on&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --cpu_speed&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># on: &amp;#39;Intel i7-6500U (4) @ 3.1GHz&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># off: &amp;#39;Intel i7-6500U (4)&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">cpu_speed&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;on&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># CPU Cores&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Display CPU cores in output&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;logical&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;logical&amp;#39;, &amp;#39;physical&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --cpu_cores&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Support: &amp;#39;physical&amp;#39; doesn&amp;#39;t work on BSD.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># logical: &amp;#39;Intel i7-6500U (4) @ 3.1GHz&amp;#39; (All virtual cores)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># physical: &amp;#39;Intel i7-6500U (2) @ 3.1GHz&amp;#39; (All physical cores)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># off: &amp;#39;Intel i7-6500U @ 3.1GHz&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">cpu_cores&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;logical&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># CPU Temperature&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Hide/Show CPU temperature.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Note the temperature is added to the regular CPU function.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;C&amp;#39;, &amp;#39;F&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --cpu_temp&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Supports: Linux, BSD&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># NOTE: For FreeBSD and NetBSD-based systems, you&amp;#39;ll need to enable&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># coretemp kernel module. This only supports newer Intel processors.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># C: &amp;#39;Intel i7-6500U (4) @ 3.1GHz [27.2°C]&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># F: &amp;#39;Intel i7-6500U (4) @ 3.1GHz [82.0°F]&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># off: &amp;#39;Intel i7-6500U (4) @ 3.1GHz&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">cpu_temp&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;off&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># GPU&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Enable/Disable GPU Brand&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;on&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;on&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --gpu_brand&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># on: &amp;#39;AMD HD 7950&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># off: &amp;#39;HD 7950&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">gpu_brand&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;on&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Which GPU to display&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;all&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;all&amp;#39;, &amp;#39;dedicated&amp;#39;, &amp;#39;integrated&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --gpu_type&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Supports: Linux&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># all:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># GPU1: AMD HD 7950&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># GPU2: Intel Integrated Graphics&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># dedicated:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># GPU1: AMD HD 7950&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># integrated:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># GPU1: Intel Integrated Graphics&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">gpu_type&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;all&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Resolution&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Display refresh rate next to each monitor&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;on&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --refresh_rate&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Supports: Doesn&amp;#39;t work on Windows.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># on: &amp;#39;1920x1080 @ 60Hz&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># off: &amp;#39;1920x1080&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">refresh_rate&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;off&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Gtk Theme / Icons / Font&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Shorten output of GTK Theme / Icons / Font&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;on&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --gtk_shorthand&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># on: &amp;#39;Numix, Adwaita&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># off: &amp;#39;Numix [GTK2], Adwaita [GTK3]&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">gtk_shorthand&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;off&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Enable/Disable gtk2 Theme / Icons / Font&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;on&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;on&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --gtk2&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># on: &amp;#39;Numix [GTK2], Adwaita [GTK3]&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># off: &amp;#39;Adwaita [GTK3]&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">gtk2&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;on&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Enable/Disable gtk3 Theme / Icons / Font&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;on&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;on&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --gtk3&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># on: &amp;#39;Numix [GTK2], Adwaita [GTK3]&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># off: &amp;#39;Numix [GTK2]&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">gtk3&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;on&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># IP Address&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Website to ping for the public IP&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;http://ident.me&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;url&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --ip_host&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">public_ip_host&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;http://ident.me&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Public IP timeout.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;2&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;int&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --ip_timeout&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">public_ip_timeout&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#00bcff">2&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Desktop Environment&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Show Desktop Environment version&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;on&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;on&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --de_version&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">de_version&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;on&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Disk&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Which disks to display.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># The values can be any /dev/sdXX, mount point or directory.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># NOTE: By default we only show the disk info for &amp;#39;/&amp;#39;.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;/&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;/&amp;#39;, &amp;#39;/dev/sdXX&amp;#39;, &amp;#39;/path/to/drive&amp;#39;.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --disk_show&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># disk_show=(&amp;#39;/&amp;#39; &amp;#39;/dev/sdb1&amp;#39;):&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># &amp;#39;Disk (/): 74G / 118G (66%)&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># &amp;#39;Disk (/mnt/Videos): 823G / 893G (93%)&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># disk_show=(&amp;#39;/&amp;#39;):&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># &amp;#39;Disk (/): 74G / 118G (66%)&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">disk_show&lt;/span>&lt;span style="color:#00d3d0">=(&lt;/span>&lt;span style="color:#79a8ff">&amp;#39;/&amp;#39;&lt;/span>&lt;span style="color:#00d3d0">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Disk subtitle.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># What to append to the Disk subtitle.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;mount&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;mount&amp;#39;, &amp;#39;name&amp;#39;, &amp;#39;dir&amp;#39;, &amp;#39;none&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --disk_subtitle&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># name: &amp;#39;Disk (/dev/sda1): 74G / 118G (66%)&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># &amp;#39;Disk (/dev/sdb2): 74G / 118G (66%)&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># mount: &amp;#39;Disk (/): 74G / 118G (66%)&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># &amp;#39;Disk (/mnt/Local Disk): 74G / 118G (66%)&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># &amp;#39;Disk (/mnt/Videos): 74G / 118G (66%)&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># dir: &amp;#39;Disk (/): 74G / 118G (66%)&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># &amp;#39;Disk (Local Disk): 74G / 118G (66%)&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># &amp;#39;Disk (Videos): 74G / 118G (66%)&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># none: &amp;#39;Disk: 74G / 118G (66%)&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># &amp;#39;Disk: 74G / 118G (66%)&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># &amp;#39;Disk: 74G / 118G (66%)&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">disk_subtitle&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;dir&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Disk percent.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Show/Hide disk percent.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;on&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;on&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --disk_percent&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># on: &amp;#39;Disk (/): 74G / 118G (66%)&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># off: &amp;#39;Disk (/): 74G / 118G&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">disk_percent&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;on&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Song&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Manually specify a music player.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;auto&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;auto&amp;#39;, &amp;#39;player-name&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --music_player&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Available values for &amp;#39;player-name&amp;#39;:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># amarok&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># audacious&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># banshee&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># bluemindo&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># clementine&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># cmus&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># deadbeef&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># deepin-music&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># dragon&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># elisa&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># exaile&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># gnome-music&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># gmusicbrowser&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># gogglesmm&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># guayadeque&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># io.elementary.music&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># iTunes&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># juk&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># lollypop&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># mocp&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># mopidy&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># mpd&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># muine&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># netease-cloud-music&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># olivia&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># playerctl&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># pogo&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># pragha&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># qmmp&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># quodlibet&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># rhythmbox&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># sayonara&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># smplayer&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># spotify&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># strawberry&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># tauonmb&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># tomahawk&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># vlc&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># xmms2d&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># xnoise&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># yarock&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">music_player&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;auto&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Format to display song information.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;%artist% - %album% - %title%&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;%artist%&amp;#39;, &amp;#39;%album%&amp;#39;, &amp;#39;%title%&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --song_format&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># default: &amp;#39;Song: Jet - Get Born - Sgt Major&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">song_format&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;%artist% - %album% - %title%&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Print the Artist, Album and Title on separate lines&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;on&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --song_shorthand&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># on: &amp;#39;Artist: The Fratellis&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># &amp;#39;Album: Costello Music&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># &amp;#39;Song: Chelsea Dagger&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># off: &amp;#39;Song: The Fratellis - Costello Music - Chelsea Dagger&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">song_shorthand&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;off&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># &amp;#39;mpc&amp;#39; arguments (specify a host, password etc).&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example: mpc_args=(-h HOST -P PASSWORD)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">mpc_args&lt;/span>&lt;span style="color:#00d3d0">=()&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Text Colors&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Text Colors&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;distro&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;distro&amp;#39;, &amp;#39;num&amp;#39; &amp;#39;num&amp;#39; &amp;#39;num&amp;#39; &amp;#39;num&amp;#39; &amp;#39;num&amp;#39; &amp;#39;num&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --colors&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Each number represents a different part of the text in&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># this order: &amp;#39;title&amp;#39;, &amp;#39;@&amp;#39;, &amp;#39;underline&amp;#39;, &amp;#39;subtitle&amp;#39;, &amp;#39;colon&amp;#39;, &amp;#39;info&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># colors=(distro) - Text is colored based on Distro colors.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># colors=(4 6 1 8 8 6) - Text is colored in the order above.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">colors&lt;/span>&lt;span style="color:#00d3d0">=(&lt;/span>distro&lt;span style="color:#00d3d0">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Text Options&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Toggle bold text&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;on&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;on&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --bold&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">bold&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;on&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Enable/Disable Underline&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;on&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;on&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --underline&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">underline_enabled&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;on&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Underline character&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;-&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;string&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --underline_char&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">underline_char&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;-&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Info Separator&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Replace the default separator with the specified string.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;:&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --separator&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># separator=&amp;#34;-&amp;gt;&amp;#34;: &amp;#39;Shell-&amp;gt; bash&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># separator=&amp;#34; =&amp;#34;: &amp;#39;WM = dwm&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">separator&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34; |&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Color Blocks&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Color block range&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># The range of colors to print.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;0&amp;#39;, &amp;#39;15&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;num&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --block_range&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Display colors 0-7 in the blocks. (8 colors)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># neofetch --block_range 0 7&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Display colors 0-15 in the blocks. (16 colors)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># neofetch --block_range 0 15&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">block_range&lt;/span>&lt;span style="color:#00d3d0">=(&lt;/span>&lt;span style="color:#00bcff">0&lt;/span> 15&lt;span style="color:#00d3d0">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Toggle color blocks&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;on&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;on&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --color_blocks&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">color_blocks&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;on&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Color block width in spaces&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;3&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;num&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --block_width&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">block_width&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#00bcff">4&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Color block height in lines&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;1&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;num&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --block_height&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">block_height&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#00bcff">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Color Alignment&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;auto&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;auto&amp;#39;, &amp;#39;num&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --col_offset&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Number specifies how far from the left side of the terminal (in spaces) to&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># begin printing the columns, in case you want to e.g. center them under your&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># text.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># col_offset=&amp;#34;auto&amp;#34; - Default behavior of neofetch&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># col_offset=7 - Leave 7 spaces then print the colors&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">col_offset&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;auto&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Progress Bars&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Bar characters&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;-&amp;#39;, &amp;#39;=&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;string&amp;#39;, &amp;#39;string&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --bar_char&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># neofetch --bar_char &amp;#39;elapsed&amp;#39; &amp;#39;total&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># neofetch --bar_char &amp;#39;-&amp;#39; &amp;#39;=&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">bar_char_elapsed&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;~&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">bar_char_total&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;=&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Toggle Bar border&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;on&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;on&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --bar_border&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">bar_border&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;on&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Progress bar length in spaces&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Number of chars long to make the progress bars.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;15&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;num&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --bar_length&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">bar_length&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#00bcff">15&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Progress bar colors&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># When set to distro, uses your distro&amp;#39;s logo colors.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;distro&amp;#39;, &amp;#39;distro&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;distro&amp;#39;, &amp;#39;num&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --bar_colors&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># neofetch --bar_colors 3 4&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># neofetch --bar_colors distro 5&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">bar_color_elapsed&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;distro&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">bar_color_total&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;distro&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Info display&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Display a bar with the info.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;bar&amp;#39;, &amp;#39;infobar&amp;#39;, &amp;#39;barinfo&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flags: --cpu_display&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># --memory_display&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># --battery_display&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># --disk_display&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># bar: &amp;#39;[---=======]&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># infobar: &amp;#39;info [---=======]&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># barinfo: &amp;#39;[---=======] info&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># off: &amp;#39;info&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">cpu_display&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;barinfo&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">memory_display&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;barinfo&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">battery_display&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;off&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">disk_display&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;barinfo&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Backend Settings&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Image backend.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;ascii&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;ascii&amp;#39;, &amp;#39;caca&amp;#39;, &amp;#39;chafa&amp;#39;, &amp;#39;jp2a&amp;#39;, &amp;#39;iterm2&amp;#39;, &amp;#39;off&amp;#39;,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># &amp;#39;pot&amp;#39;, &amp;#39;termpix&amp;#39;, &amp;#39;pixterm&amp;#39;, &amp;#39;tycat&amp;#39;, &amp;#39;w3m&amp;#39;, &amp;#39;kitty&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --backend&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">image_backend&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;ascii&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Image Source&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Which image or ascii file to display.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;auto&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;auto&amp;#39;, &amp;#39;ascii&amp;#39;, &amp;#39;wallpaper&amp;#39;, &amp;#39;/path/to/img&amp;#39;, &amp;#39;/path/to/ascii&amp;#39;, &amp;#39;/path/to/dir/&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># &amp;#39;command output (neofetch --ascii &amp;#34;$(fortune | cowsay -W 30)&amp;#34;)&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --source&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># NOTE: &amp;#39;auto&amp;#39; will pick the best image source for whatever image backend is used.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># In ascii mode, distro ascii art will be used and in an image mode, your&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># wallpaper will be used.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">image_source&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;auto&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Ascii Options&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Ascii distro&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Which distro&amp;#39;s ascii art to display.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;auto&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;auto&amp;#39;, &amp;#39;distro_name&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --ascii_distro&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># NOTE: AIX, Alpine, Anarchy, Android, Antergos, antiX, &amp;#34;AOSC OS&amp;#34;,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># &amp;#34;AOSC OS/Retro&amp;#34;, Apricity, ArcoLinux, ArchBox, ARCHlabs,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># ArchStrike, XFerience, ArchMerge, Arch, Artix, Arya, Bedrock,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Bitrig, BlackArch, BLAG, BlankOn, BlueLight, bonsai, BSD,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># BunsenLabs, Calculate, Carbs, CentOS, Chakra, ChaletOS,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Chapeau, Chrom*, Cleanjaro, ClearOS, Clear_Linux, Clover,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Condres, Container_Linux, CRUX, Cucumber, Debian, Deepin,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># DesaOS, Devuan, DracOS, DarkOs, DragonFly, Drauger, Elementary,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># EndeavourOS, Endless, EuroLinux, Exherbo, Fedora, Feren, FreeBSD,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># FreeMiNT, Frugalware, Funtoo, GalliumOS, Garuda, Gentoo, Pentoo,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># gNewSense, GNOME, GNU, GoboLinux, Grombyang, Guix, Haiku, Huayra,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Hyperbola, janus, Kali, KaOS, KDE_neon, Kibojoe, Kogaion,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Korora, KSLinux, Kubuntu, LEDE, LFS, Linux_Lite,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># LMDE, Lubuntu, Lunar, macos, Mageia, MagpieOS, Mandriva,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Manjaro, Maui, Mer, Minix, LinuxMint, MX_Linux, Namib,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Neptune, NetBSD, Netrunner, Nitrux, NixOS, Nurunner,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># NuTyX, OBRevenge, OpenBSD, openEuler, OpenIndiana, openmamba,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># OpenMandriva, OpenStage, OpenWrt, osmc, Oracle, OS Elbrus, PacBSD,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Parabola, Pardus, Parrot, Parsix, TrueOS, PCLinuxOS, Peppermint,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># popos, Porteus, PostMarketOS, Proxmox, Puppy, PureOS, Qubes, Radix,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Raspbian, Reborn_OS, Redstar, Redcore, Redhat, Refracted_Devuan,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Regata, Rosa, sabotage, Sabayon, Sailfish, SalentOS, Scientific,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Septor, SereneLinux, SharkLinux, Siduction, Slackware, SliTaz,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># SmartOS, Solus, Source_Mage, Sparky, Star, SteamOS, SunOS,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># openSUSE_Leap, openSUSE_Tumbleweed, openSUSE, SwagArch, Tails,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Trisquel, Ubuntu-Budgie, Ubuntu-GNOME, Ubuntu-MATE, Ubuntu-Studio,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Ubuntu, Venom, Void, Obarun, windows10, Windows7, Xubuntu, Zorin,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># and IRIX have ascii logos&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># NOTE: Arch, Ubuntu, Redhat, and Dragonfly have &amp;#39;old&amp;#39; logo variants.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Use &amp;#39;{distro name}_old&amp;#39; to use the old logos.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># NOTE: Ubuntu has flavor variants.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Change this to Lubuntu, Kubuntu, Xubuntu, Ubuntu-GNOME,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Ubuntu-Studio, Ubuntu-Mate or Ubuntu-Budgie to use the flavors.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># NOTE: Arcolinux, Dragonfly, Fedora, Alpine, Arch, Ubuntu,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># CRUX, Debian, Gentoo, FreeBSD, Mac, NixOS, OpenBSD, android,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Antrix, CentOS, Cleanjaro, ElementaryOS, GUIX, Hyperbola,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Manjaro, MXLinux, NetBSD, Parabola, POP_OS, PureOS,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Slackware, SunOS, LinuxLite, OpenSUSE, Raspbian,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># postmarketOS, and Void have a smaller logo variant.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Use &amp;#39;{distro name}_small&amp;#39; to use the small variants.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">ascii_distro&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;auto&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Ascii Colors&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;distro&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;distro&amp;#39;, &amp;#39;num&amp;#39; &amp;#39;num&amp;#39; &amp;#39;num&amp;#39; &amp;#39;num&amp;#39; &amp;#39;num&amp;#39; &amp;#39;num&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --ascii_colors&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># ascii_colors=(distro) - Ascii is colored based on Distro colors.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># ascii_colors=(4 6 1 8 8 6) - Ascii is colored using these colors.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">ascii_colors&lt;/span>&lt;span style="color:#00d3d0">=(&lt;/span>distro&lt;span style="color:#00d3d0">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Bold ascii logo&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Whether or not to bold the ascii logo.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;on&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;on&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --ascii_bold&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">ascii_bold&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;off&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Image Options&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Image loop&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Setting this to on will make neofetch redraw the image constantly until&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Ctrl+C is pressed. This fixes display issues in some terminal emulators.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;on&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --loop&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">image_loop&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;off&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Thumbnail directory&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;~/.cache/thumbnails/neofetch&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;dir&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">thumbnail_dir&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;&lt;/span>&lt;span style="color:#79a8ff">${&lt;/span>&lt;span style="color:#00d3d0">XDG_CACHE_HOME&lt;/span>&lt;span style="color:#b6a0ff">:-&lt;/span>&lt;span style="color:#79a8ff">${&lt;/span>&lt;span style="color:#00d3d0">HOME&lt;/span>&lt;span style="color:#79a8ff">}&lt;/span>/.cache&lt;span style="color:#79a8ff">}&lt;/span>&lt;span style="color:#79a8ff">/thumbnails/neofetch&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Crop mode&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;normal&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;normal&amp;#39;, &amp;#39;fit&amp;#39;, &amp;#39;fill&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --crop_mode&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># See this wiki page to learn about the fit and fill options.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># https://github.com/dylanaraps/neofetch/wiki/What-is-Waifu-Crop%3F&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">crop_mode&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;normal&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Crop offset&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Note: Only affects &amp;#39;normal&amp;#39; crop mode.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;center&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;northwest&amp;#39;, &amp;#39;north&amp;#39;, &amp;#39;northeast&amp;#39;, &amp;#39;west&amp;#39;, &amp;#39;center&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># &amp;#39;east&amp;#39;, &amp;#39;southwest&amp;#39;, &amp;#39;south&amp;#39;, &amp;#39;southeast&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --crop_offset&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">crop_offset&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;center&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Image size&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># The image is half the terminal width by default.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;auto&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;auto&amp;#39;, &amp;#39;00px&amp;#39;, &amp;#39;00%&amp;#39;, &amp;#39;none&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flags: --image_size&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># --size&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">image_size&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;auto&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Gap between image and text&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;3&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;num&amp;#39;, &amp;#39;-num&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --gap&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">gap&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#00bcff">3&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Image offsets&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Only works with the w3m backend.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;0&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;px&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flags: --xoffset&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># --yoffset&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">yoffset&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#00bcff">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">xoffset&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#00bcff">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Image background color&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Only works with the w3m backend.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;color&amp;#39;, &amp;#39;blue&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Flag: --bg_color&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">background_color&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Misc Options&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Stdout mode&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Turn off all colors and disables image backend (ASCII/Image).&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Useful for piping into another command.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Default: &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8a8a8"># Values: &amp;#39;on&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00d3d0">stdout&lt;/span>&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;off&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Mac Mini M1 Problems</title><link>/2023/mac-mini-m1-problems/</link><pubDate>Wed, 13 Dec 2023 12:09:15 +0800</pubDate><guid>/2023/mac-mini-m1-problems/</guid><description>&lt;h2 id="troubleshooting-notes" >
+&lt;div>
+&lt;a href="#troubleshooting-notes">
+#
+&lt;/a>
+Troubleshooting notes
+&lt;/div>
+&lt;/h2>
 &lt;p>Having come from a 10+ year old MacBook Air that&amp;rsquo;s still running smoothly on macOS Catalina; I find it a bit disconcerting how I need to troubleshoot through weird bugs and errors on a modern M1 Apple Silicon Mac Mini running macOS Sonoma 14. I&amp;rsquo;ve used Mojave, El Capitan and Catalina on the Air and don&amp;rsquo;t remember having this many bugs / errors&amp;hellip;&lt;/p>
-&lt;p>Anyhow, this post will mainly be bullet points on how I troubleshoot the issues encountered. I will be updating this post as I find solutions to further problems. Hope it helps you!&lt;/p></description></item><item><title>Adding a simple "scroll to the top" button to your Hugo site</title><link>https://www.burgeonlab.com/2023/adding-a-simple-scroll-to-the-top-button-to-your-hugo-site/</link><pubDate>Sat, 21 Oct 2023 10:58:31 +0800</pubDate><guid>https://www.burgeonlab.com/2023/adding-a-simple-scroll-to-the-top-button-to-your-hugo-site/</guid><description>&lt;h2 id="using-just-html-and-css">Using just HTML and CSS&lt;/h2>
+&lt;p>Anyhow, this post will mainly be bullet points on how I troubleshoot the issues encountered. I will be updating this post as I find solutions to further problems. Hope it helps you!&lt;/p>
+&lt;h2 id="problems-on-my-mac-mini-m1-2020-so-far" >
+&lt;div>
+&lt;a href="#problems-on-my-mac-mini-m1-2020-so-far">
+#
+&lt;/a>
+Problems on my Mac Mini M1 (2020) so far
+&lt;/div>
+&lt;/h2>
+&lt;ol>
+&lt;li>Unable to eject connected disks&lt;/li>
+&lt;li>Universal Control not connecting with iPad Mini 6&lt;/li>
+&lt;li>Apps unable to open when downloaded outside of the Mac App Store&lt;/li>
+&lt;/ol>
+&lt;h2 id="my-workarounds-for-these-errors" >
+&lt;div>
+&lt;a href="#my-workarounds-for-these-errors">
+#
+&lt;/a>
+My workarounds for these errors
+&lt;/div>
+&lt;/h2>
+&lt;h3 id="cant-eject-external-disks" >
+&lt;div>
+&lt;a href="#cant-eject-external-disks">
+##
+&lt;/a>
+Can&amp;rsquo;t eject external disks
+&lt;/div>
+&lt;/h3>
+&lt;ul>
+&lt;li>Close all active applications that could be using the disk.&lt;/li>
+&lt;li>Force restart Finder.&lt;/li>
+&lt;li>Log out and log back in. Try ejecting the disk again.&lt;/li>
+&lt;li>Turn off the computer and unplug the drive after the drive stops spinning / light turns off.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;em>Note about Thunderbolt external enclosures - unsafe shutdowns&lt;/em>&lt;/p>
+&lt;ul>
+&lt;li>Despite ejecting Thunderbolt &lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup> drive volumes, the drive remains connected within Disk Utility. If the drive is unplugged while the computer is running, it will result in +1 in the &amp;ldquo;unsafe shutdown&amp;rdquo; counter.&lt;/li>
+&lt;li>After researching for other users facing &lt;a href="https://forums.macrumors.com/threads/thunderbolt-3-m-2-nvme-ssd-enclosures.2027925/page-30">similar issues&lt;/a> with their SSD enclosures, it seems to be a problem with the Mac NVME driver not fully ejecting the Thunderbolt device.&lt;/li>
+&lt;li>To prevent unsafe shutdowns, I make sure to only physically disconnect when the Mac is off.&lt;/li>
+&lt;/ul>
+&lt;h3 id="universal-control-not-working---troubleshooting-steps" >
+&lt;div>
+&lt;a href="#universal-control-not-working---troubleshooting-steps">
+##
+&lt;/a>
+Universal Control not working - troubleshooting steps
+&lt;/div>
+&lt;/h3>
+&lt;ul>
+&lt;li>
+&lt;p>Toggle off &amp;ldquo;Block all incoming connections&amp;rdquo; and &amp;ldquo;Enable stealth mode&amp;rdquo; in System Settings &amp;gt; Network &amp;gt; Firewall &amp;gt; Options.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>In the same window, add &amp;ldquo;Control Center.app&amp;rdquo; (&lt;code>/System/Library/CoreServices/ControlCenter.app&lt;/code>) and &amp;ldquo;Universal Control.app&amp;rdquo; (&lt;code>/System/Library/CoreServices/UniversalControl.app&lt;/code>) to &amp;ldquo;Allow incoming connections&amp;rdquo;.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Remember to turn on bluetooth on both devices and connected to the same WiFi network.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>In System Settings &amp;gt; Displays &amp;gt; Advance, ensure all three toggles are on under &amp;ldquo;Link to Mac or iPad&amp;rdquo;.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Confirm any third-party firewall / network filter is not blocking Universal Control, e.g. Little Snitch, LuLu, NetBarrier.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Both devices should be signed in under the same Apple ID with 2FA turned on.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>If you&amp;rsquo;ve done all the above but it&amp;rsquo;s still not connecting / device is not being recognized; sleep your Mac and try again upon wake.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>To confirm it has worked, you should see a second device graphic next to your main monitor, in System Settings &amp;gt; Displays. Clicking the + button will show &amp;ldquo;Link keyboard and mouse to&amp;rdquo; and your device name e.g. ipadmini6. You can arrange the display so that you can slide the mouse easily to the remote device.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="error-the-app-is-damaged-and-can-not-be-opened-on-mac" >
+&lt;div>
+&lt;a href="#error-the-app-is-damaged-and-can-not-be-opened-on-mac">
+##
+&lt;/a>
+Error: &amp;ldquo;The App is Damaged and Can not be Opened on Mac&amp;rdquo;
+&lt;/div>
+&lt;/h3>
+&lt;ul>
+&lt;li>This is caused by com.apple.quarantine, a safety feature. It prevents opening apps from unidentified developers or apps downloaded outside of the Mac App Store.&lt;/li>
+&lt;li>As I often use &lt;a href="https://formulae.brew.sh/">Homebrew&lt;/a> or download apps directly from GitHub repos, I get this error quite often.&lt;/li>
+&lt;li>To remove the quarantine attribute from the app, open terminal and type the following. This is an example for the app &lt;a href="https://peazip.github.io/">PeaZip&lt;/a>.&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>xattr -d com.apple.quarantine /Applications/peazip.app
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>If you want to remove the attribute recursively (including all its files and subfolders), add the &lt;code>-r flag&lt;/code>. For example:&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>xattr -r -d com.apple.quarantine /Applications/Feishin.app
+&lt;/code>&lt;/pre>&lt;div class="footnotes" role="doc-endnotes">
+&lt;hr>
+&lt;ol>
+&lt;li id="fn:1">
+&lt;p>I have the ACASIS TBU405PROM1 with Samsung 980 Pro 2TB partitioned into two volumes; one for Time Machine, the other for general purpose.&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/div></description></item><item><title>Adding a simple "scroll to the top" button to your Hugo site</title><link>/2023/adding-a-simple-scroll-to-the-top-button-to-your-hugo-site/</link><pubDate>Sat, 21 Oct 2023 10:58:31 +0800</pubDate><guid>/2023/adding-a-simple-scroll-to-the-top-button-to-your-hugo-site/</guid><description>&lt;h2 id="using-just-html-and-css" >
+&lt;div>
+&lt;a href="#using-just-html-and-css">
+#
+&lt;/a>
+Using just HTML and CSS
+&lt;/div>
+&lt;/h2>
 &lt;p>With only basic HTML and CSS knowledge, it was great news when I found out that a scroll-to-top button can be easily created without Javascript &lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>. I went ahead to add it to my current Hugo theme; &lt;a href="https://github.com/lxndrblz/anatole">Anatole&lt;/a>.&lt;/p>
-&lt;p>The main gist is to create an anchor at the top of the page, and have the link / button go to the anchor when pressed so it &amp;ldquo;scrolls to the top&amp;rdquo;.&lt;/p></description></item><item><title>Booting DietPi from SSD on a Raspberry Pi 4B 8GB</title><link>https://www.burgeonlab.com/2023/booting-dietpi-from-ssd-on-a-raspberry-pi-4b-8gb/</link><pubDate>Sun, 01 Oct 2023 20:35:10 +0800</pubDate><guid>https://www.burgeonlab.com/2023/booting-dietpi-from-ssd-on-a-raspberry-pi-4b-8gb/</guid><description>&lt;h2 id="setting-up-dietpi-on-a-headless-raspberry-pi-4b-8gb">Setting up DietPi on a headless Raspberry Pi 4B 8GB&lt;/h2>
-
-
-
- 
- 
- 
-
- 
- 
-
- 
-
- &lt;img src="https://www.burgeonlab.com/2023/booting-dietpi-from-ssd-on-a-raspberry-pi-4b-8gb/title.webp" alt="ALT TEXT HERE">
-
-
+&lt;p>The main gist is to create an anchor at the top of the page, and have the link / button go to the anchor when pressed so it &amp;ldquo;scrolls to the top&amp;rdquo;.&lt;/p>
+&lt;h2 id="where-to-put-the-anchor" >
+&lt;div>
+&lt;a href="#where-to-put-the-anchor">
+#
+&lt;/a>
+Where to put the anchor?
+&lt;/div>
+&lt;/h2>
+&lt;p>Since the navigation bar / header bar persists while scrolling in the Anatole theme; instead of adding the anchor &lt;code>id=&amp;quot;top-anchor&amp;quot;&lt;/code> to &lt;code>header class=&amp;quot;header&amp;quot;&lt;/code>, add it to &lt;code>class=&amp;quot;wrapper__main&amp;quot; id=&amp;quot;top-anchor&amp;quot;&lt;/code>.&lt;/p>
+&lt;p>Placing the anchor in &lt;code>class=&amp;quot;wrapper__main&amp;quot;&lt;/code> and also &lt;code>class=&amp;quot;wrapper__main wrapper__main--fullscreen&amp;quot;&lt;/code> will make the link jump up to the top correctly - otherwise it will not move when the button is pressed. Add this &lt;code>id&lt;/code> to &lt;code>baseof.html&lt;/code> under &lt;code>layouts/_default&lt;/code>.&lt;/p>
+&lt;p>If you don&amp;rsquo;t have a &lt;code>baseof.html&lt;/code> file already in your Hugo directory, try to find and copy the default from your theme&amp;rsquo;s &lt;a href="https://github.com/lxndrblz/anatole/tree/master/layouts/_default">repo&lt;/a>.&lt;/p>
+&lt;h3 id="link-for-button" >
+&lt;div>
+&lt;a href="#link-for-button">
+##
+&lt;/a>
+Link for button
+&lt;/div>
+&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#fff;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-html" data-lang="html">&lt;span style="display:flex;">&lt;span> &amp;lt;a href&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;#top-anchor&amp;#34;&lt;/span>&amp;gt;&amp;lt;button class&lt;span style="color:#00d3d0">=&lt;/span>&lt;span style="color:#79a8ff">&amp;#34;top-anchor&amp;#34;&lt;/span>&amp;gt;⇧&amp;lt;/button&amp;gt;&amp;lt;/a&amp;gt;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Place this link right above &lt;code>&amp;lt;/body&amp;gt;&lt;/code> in &lt;code>baseof.html&lt;/code>. My link text is an up arrow symbol, but you could use an emoji, text or image instead.&lt;/p>
+&lt;h2 id="creating-the-button-using-css" >
+&lt;div>
+&lt;a href="#creating-the-button-using-css">
+#
+&lt;/a>
+Creating the button using CSS
+&lt;/div>
+&lt;/h2>
+&lt;p>Create a css file if it doesn&amp;rsquo;t already exist.&lt;/p>
+&lt;p>&lt;code>assets/css/syntax.css&lt;/code>&lt;/p>
+&lt;p>Then create a button with your own customizations with the class created earlier (&lt;code>top-anchor&lt;/code>). I have used these options for mine:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#fff;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-css" data-lang="css">&lt;span style="display:flex;">&lt;span>.top-anchor { &lt;span style="color:#a8a8a8">/*jump to top button, link is in baseof.html */&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">position&lt;/span>: &lt;span style="color:#00bcff">fixed&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">bottom&lt;/span>: &lt;span style="color:#00bcff">9&lt;/span>&lt;span style="color:#6ae4b9">px&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">right&lt;/span>: &lt;span style="color:#00bcff">9&lt;/span>&lt;span style="color:#6ae4b9">px&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">max-width&lt;/span>: &lt;span style="color:#00bcff">39&lt;/span>&lt;span style="color:#6ae4b9">px&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">max-height&lt;/span>: &lt;span style="color:#00bcff">39&lt;/span>&lt;span style="color:#6ae4b9">px&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">width&lt;/span>: &lt;span style="color:#00bcff">100&lt;/span>&lt;span style="color:#6ae4b9">%&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">height&lt;/span>: &lt;span style="color:#00bcff">100&lt;/span>&lt;span style="color:#6ae4b9">%&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">border&lt;/span>: &lt;span style="color:#00bcff">3&lt;/span>&lt;span style="color:#6ae4b9">px&lt;/span> &lt;span style="color:#00bcff">ridge&lt;/span> &lt;span style="color:#00bcff">#2a3031&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">border-radius&lt;/span>: &lt;span style="color:#00bcff">30&lt;/span>&lt;span style="color:#6ae4b9">px&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">justify-content&lt;/span>: &lt;span style="color:#00bcff">center&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">background&lt;/span>: &lt;span style="color:#00bcff">#353b3c&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">font-size&lt;/span>: &lt;span style="color:#00bcff">2&lt;/span>&lt;span style="color:#6ae4b9">rem&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">color&lt;/span>: &lt;span style="color:#00bcff">#c6c7c4&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">font-weight&lt;/span>: &lt;span style="color:#00bcff">500&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">cursor&lt;/span>: &lt;span style="color:#00bcff">pointer&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">opacity&lt;/span>: &lt;span style="color:#00bcff">50&lt;/span>&lt;span style="color:#6ae4b9">%&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>.top-anchor:hover {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">opacity&lt;/span>: &lt;span style="color:#00bcff">100&lt;/span>&lt;span style="color:#6ae4b9">%&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b6a0ff">color&lt;/span>: &lt;span style="color:#00bcff">#B06969&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="result" >
+&lt;div>
+&lt;a href="#result">
+#
+&lt;/a>
+Result
+&lt;/div>
+&lt;/h2>
+&lt;p>You should get a button on the bottom right corner like this:&lt;/p>
+&lt;img src="https://www.burgeonlab.com/2023/adding-a-simple-scroll-to-the-top-button-to-your-hugo-site/button.webp" alt="Screenshot of scroll to top button on Hugo blog">
+&lt;p>I&amp;rsquo;ve made mine 50% opacity to reduce distraction, but upon hovering, it will light up to 100% opacity and change to red. You can see the link points to the anchor.&lt;/p>
+&lt;p>Hope this helps!&lt;/p>
+&lt;div class="footnotes" role="doc-endnotes">
+&lt;hr>
+&lt;ol>
+&lt;li id="fn:1">
+&lt;p>&lt;a href="https://secluded.site/adding-a-better-scroll-to-top-button-without-javascript/">https://secluded.site/adding-a-better-scroll-to-top-button-without-javascript/&lt;/a>&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/div></description></item><item><title>Booting DietPi from SSD on a Raspberry Pi 4B 8GB</title><link>/2023/booting-dietpi-from-ssd-on-a-raspberry-pi-4b-8gb/</link><pubDate>Sun, 01 Oct 2023 20:35:10 +0800</pubDate><guid>/2023/booting-dietpi-from-ssd-on-a-raspberry-pi-4b-8gb/</guid><description>&lt;h2 id="setting-up-dietpi-on-a-headless-raspberry-pi-4b-8gb" >
+&lt;div>
+&lt;a href="#setting-up-dietpi-on-a-headless-raspberry-pi-4b-8gb">
+#
+&lt;/a>
+Setting up DietPi on a headless Raspberry Pi 4B 8GB
+&lt;/div>
+&lt;/h2>
+&lt;img src="https://www.burgeonlab.com/2023/booting-dietpi-from-ssd-on-a-raspberry-pi-4b-8gb/title.webp" alt="ALT TEXT HERE">
 &lt;p>Using &lt;a href="https://etcher.balena.io/">Balena Etcher&lt;/a> on macOS, I flashed a copy of the &lt;a href="https://dietpi.com/#downloadinfo">Raspberry Pi 2/3/4 DietPi&lt;/a> image onto a Kingston 128GB Canvas Go Plus microSD card. Went through the default configuration via SSH in a Wi-Fi, headless setup.&lt;/p>
-&lt;h3 id="good-ol-ethernet-saves-the-day">Good ol&amp;rsquo; Ethernet saves the day&lt;/h3>
-&lt;p>Following the installation &lt;a href="https://dietpi.com/docs/install/">guide&lt;/a>, despite enabling WiFi in the the initial one-time-use &lt;code>dietpi.txt&lt;/code> and entering my WiFi credentials in &lt;code>dietpi-wifi.txt&lt;/code>, I was unable to get the RPi to connect to my network (which meant I couldn&amp;rsquo;t scan for its IP address). I resorted to plugging it into the router with an Ethernet cable; got the IP address of the RPi and turned on WiFi manually in &lt;code>dietpi-config&lt;/code> after the first boot. My router is not conveniently accessible, so it was a relief when I could get it to work after the initial setup.&lt;/p></description></item><item><title>Sudden Influx of New Gear</title><link>https://www.burgeonlab.com/2023/sudden-influx-of-new-gear/</link><pubDate>Thu, 28 Sep 2023 19:05:34 +0800</pubDate><guid>https://www.burgeonlab.com/2023/sudden-influx-of-new-gear/</guid><description>&lt;p>Having gone on a deep dive in the mid of September learning about Hugo and Git for documenting my Raspberry Pi 4B homelab journey; I found myself suddenly distracted by a great deal on a Mac Mini M1 in the local second-hand market.&lt;/p>
-
-
-
- 
- 
- 
-
- 
- 
-
- 
-
- &lt;img src="https://www.burgeonlab.com/2023/sudden-influx-of-new-gear/macmini_geniusbar.webp" alt="At the Apple Genius Bar">
-
-
-&lt;h2 id="retiring-my-trusty-daily-driver">Retiring my trusty daily driver&lt;/h2>
-&lt;p>My digital life, since 2012, has been lived through the Apple MacBook Air mid-2012 13&amp;quot;, maxed out spec (Dual-Core Intel Core i7 2Ghz, 8GB DDR3 RAM, 512GB SATA SSD). It has served me very well over the years, but increasingly more apps are dropping their software support for Catalina, like Adobe Lightroom Classic - an essential app for me.&lt;/p></description></item><item><title>Hello, Hugo</title><link>https://www.burgeonlab.com/2023/hello-hugo/</link><pubDate>Mon, 18 Sep 2023 20:08:15 +0800</pubDate><guid>https://www.burgeonlab.com/2023/hello-hugo/</guid><description>&lt;p>Having grown up with Xanga, LiveJournal, Wordpress.com and Tumblr, then graduating to self-hosting Wordpress; using Hugo is a breath of fresh air in my blogging journey.&lt;/p>
-&lt;h2 id="learning-new-things">Learning new things&lt;/h2>
-&lt;p>In late 2023, I have been trying to wrap my head around GitHub and being more competent with CLI. At the same time, I learnt to customize the macOS terminal with &lt;a href="https://ohmyz.sh/">OMZ&lt;/a> and &lt;a href="https://github.com/romkatv/powerlevel10k">PowerLevel10k&lt;/a>, using nano to edit files, using &lt;a href="https://www.ssh.com/academy/ssh">SSH&lt;/a> with keys and &lt;a href="https://www.digitalocean.com/community/tutorials/how-to-use-rsync-to-sync-local-and-remote-directories">rsync&lt;/a>.&lt;/p></description></item></channel></rss>
+&lt;h3 id="good-ol-ethernet-saves-the-day" >
+&lt;div>
+&lt;a href="#good-ol-ethernet-saves-the-day">
+##
+&lt;/a>
+Good ol&amp;rsquo; Ethernet saves the day
+&lt;/div>
+&lt;/h3>
+&lt;p>Following the installation &lt;a href="https://dietpi.com/docs/install/">guide&lt;/a>, despite enabling WiFi in the the initial one-time-use &lt;code>dietpi.txt&lt;/code> and entering my WiFi credentials in &lt;code>dietpi-wifi.txt&lt;/code>, I was unable to get the RPi to connect to my network (which meant I couldn&amp;rsquo;t scan for its IP address). I resorted to plugging it into the router with an Ethernet cable; got the IP address of the RPi and turned on WiFi manually in &lt;code>dietpi-config&lt;/code> after the first boot. My router is not conveniently accessible, so it was a relief when I could get it to work after the initial setup.&lt;/p>
+&lt;h3 id="not-all-wifi-channels-are-showing" >
+&lt;div>
+&lt;a href="#not-all-wifi-channels-are-showing">
+##
+&lt;/a>
+Not all WiFi channels are showing
+&lt;/div>
+&lt;/h3>
+&lt;p>If you are having trouble finding the 5Ghz channel of your WiFi connection, ensure the country code is correct. For example, I had HK (Hong Kong) set in the DietPi network locale settings, but it could only detect my 2.4Ghz network. After changing it to CN (China), I was able to see the 5G SSID.&lt;/p>
+&lt;h2 id="booting-dietpi-from-external-ssd" >
+&lt;div>
+&lt;a href="#booting-dietpi-from-external-ssd">
+#
+&lt;/a>
+Booting DietPi from external SSD
+&lt;/div>
+&lt;/h2>
+&lt;p>I bought a UGREEN USB 3.1 enclosure &lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup> for my Samsung 870 EVO SATA SSD.&lt;/p>
+&lt;img src="https://www.burgeonlab.com/2023/booting-dietpi-from-ssd-on-a-raspberry-pi-4b-8gb/enclosure.webp" alt="UGREEN 2.5 inch SATA drive USB Enclosure">
+&lt;img src="https://www.burgeonlab.com/2023/booting-dietpi-from-ssd-on-a-raspberry-pi-4b-8gb/enclosure_spec.webp" alt="Specification of aluminium usb SSD enclosure">
+&lt;p>The SSD was previously formatted as ext4 from when I was messing around with antiX and Debian on two old PCs. I had my music library in one of the /home partitions (the other two partitions being a /swap and /boot).&lt;/p>
+&lt;p>And here is why it became a bit tricky for me; I couldn&amp;rsquo;t find an easy way to clone the current OS image from the microSD onto the existing /boot partition, delete the /swap and keep the /home so my music files remain untouched.&lt;/p>
+&lt;p>I can&amp;rsquo;t read or write ext4 on macOS (ext4fuse didn&amp;rsquo;t work and I didn&amp;rsquo;t want to pay for the Paragon software), so I had to find a way to clone on the Raspberry Pi CLI via SSH. It took me some searching before I found a way to make a backup image of the currently running DietPi OS from the microSD.&lt;/p>
+&lt;h3 id="using-the-image-backup-script-to-make-an-image" >
+&lt;div>
+&lt;a href="#using-the-image-backup-script-to-make-an-image">
+##
+&lt;/a>
+Using the image-backup script to make an image
+&lt;/div>
+&lt;/h3>
+&lt;p>Originally I was going to use &lt;code>dd&lt;/code> to make a copy but I read that it is not good practice to copy a live, working system this way. I eventually used a tool called &lt;code>image-utils&lt;/code> found at the &lt;a href="https://forums.raspberrypi.com/viewtopic.php?t=332000">Raspberry Pi forum&lt;/a>. Using this &lt;code>image-backup&lt;/code> script, a backup of the current system can be made&lt;/p>
+&lt;p>I tried flashing the modified DietPi backup image to the /boot partition, preserving the /home partition with my music files, but in the end, all I could do was flash the .img file using Etcher again on my Mac to the SSD, formatting the drive in the process.&lt;/p>
+&lt;p>With that out of the way, I shut down the Pi, removed the microSD and plugged in the UGREEN enclosure into one the the USB 3.0 (blue) ports and turned on the Pi. It booted up without any trouble and I called it a day.&lt;/p>
+&lt;h2 id="installing-software" >
+&lt;div>
+&lt;a href="#installing-software">
+#
+&lt;/a>
+Installing software
+&lt;/div>
+&lt;/h2>
+&lt;p>Filled with anticipation, I went ahead and installed some services via the optimized dietpi-software list.&lt;/p>
+&lt;img src="https://www.burgeonlab.com/2023/booting-dietpi-from-ssd-on-a-raspberry-pi-4b-8gb/dietpi_software.webp" alt="Software to be installed on the DietPi distro for Raspberry Pi 4B">
+&lt;p>I only have experience with &lt;a href="https://www.navidrome.org/">Navidrome&lt;/a> and &lt;a href="https://pi-hole.net/">Pi-hole&lt;/a>. Some other self-hosted applications I am planning to run on my Raspberry Pi 4B homelab are:&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://miniflux.app/docs/installation.html">Miniflux&lt;/a> - RSS&lt;/li>
+&lt;li>&lt;a href="https://gitlab.com/py_crash/docker-libregrammar">Libregrammar&lt;/a> - LT fork&lt;/li>
+&lt;li>&lt;a href="https://github.com/wallabag/wallabag">Wallabag&lt;/a> - bookmark manager&lt;/li>
+&lt;li>&lt;a href="https://calibre-ebook.com/">calibre&lt;/a> - ebook manager&lt;/li>
+&lt;li>&lt;a href="https://tailscale.com/">Tailscale&lt;/a> - VPN&lt;/li>
+&lt;/ul>
+&lt;p>A great place to discover programs to self host is &lt;a href="https://github.com/awesome-selfhosted/awesome-selfhosted">awesome-selfhosted/awesome-selfhosted&lt;/a>. I&amp;rsquo;ll be updating how I set up each of these as I learn how to do it!&lt;/p>
+&lt;div class="footnotes" role="doc-endnotes">
+&lt;hr>
+&lt;ol>
+&lt;li id="fn:1">
+&lt;p>I bought the metal case variant UGREEN 2.5&amp;quot; SATA Enclosure, with the phrase &amp;ldquo;Protect What You Love!&amp;rdquo; laser etched on the bottom right corner of the top plate. The USB cable is a Micro B to USB-A 3.0. There&amp;rsquo;s more info from &lt;a href="https://jamesachambers.com/best-ssd-storage-adapters-for-raspberry-pi-4-400/">James Chamber&amp;rsquo;s page&lt;/a> on what external drives works well with the Raspberry Pi.&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/div></description></item><item><title>Sudden Influx of New Gear</title><link>/2023/sudden-influx-of-new-gear/</link><pubDate>Thu, 28 Sep 2023 19:05:34 +0800</pubDate><guid>/2023/sudden-influx-of-new-gear/</guid><description>&lt;p>Having gone on a deep dive in the mid of September learning about Hugo and Git for documenting my Raspberry Pi 4B homelab journey; I found myself suddenly distracted by a great deal on a Mac Mini M1 in the local second-hand market.&lt;/p>
+&lt;img src="https://www.burgeonlab.com/2023/sudden-influx-of-new-gear/macmini_geniusbar.webp" alt="At the Apple Genius Bar">
+&lt;h2 id="retiring-my-trusty-daily-driver" >
+&lt;div>
+&lt;a href="#retiring-my-trusty-daily-driver">
+#
+&lt;/a>
+Retiring my trusty daily driver
+&lt;/div>
+&lt;/h2>
+&lt;p>My digital life, since 2012, has been lived through the Apple MacBook Air mid-2012 13&amp;quot;, maxed out spec (Dual-Core Intel Core i7 2Ghz, 8GB DDR3 RAM, 512GB SATA SSD). It has served me very well over the years, but increasingly more apps are dropping their software support for Catalina, like Adobe Lightroom Classic - an essential app for me.&lt;/p>
+&lt;p>I also had the internal SSD fail on me last year. Luckily a full format, fsck and clean OS install to Catalina saved it; albeit temporarily. Since then, I&amp;rsquo;ve been on the lookout for a replacement - to which I chose the Mac Mini M1, acting as a stopgap upgrade before investing in a MacBook Pro 14&amp;quot; or 16&amp;quot; with the rumoured impressive 3nm Apple Silicon chip.&lt;/p>
+&lt;img src="https://www.burgeonlab.com/2023/sudden-influx-of-new-gear/ssd_health.webp" alt="Smartctl results of the 2012 MacBook Air">
+&lt;p>Fast forward to last week, I found an almost like new (SSD lifespan only about 1TB data written, less than 30 hours power on hours) Mac Mini M1 in the configuration I want, 16GB RAM + 1TB SSD, for ~$570USD / $540EUR. I pounced at the deal - it even had Apple Care till February of next year!&lt;/p>
+&lt;h2 id="apple-m1-misery" >
+&lt;div>
+&lt;a href="#apple-m1-misery">
+#
+&lt;/a>
+Apple M1 misery?
+&lt;/div>
+&lt;/h2>
+&lt;p>I always had a smooth experience with macOS El Capitan and Mojave on my Air. Even during the bigger jump to Catalina, most software ran well with no crashes or major issues. All the apps I want to run works well. Unfortunately, I cannot say the same for the M1 Mac Mini running Ventura 13.6.&lt;/p>
+&lt;p>Ventura OS itself was fairly buggy. Even when moving around Finder and System Settings, I found little bugs here and there. These were some of the things that didn&amp;rsquo;t work for me:&lt;/p>
+&lt;ul>
+&lt;li>Pointer often changes to an &amp;ldquo;adjust width&amp;rdquo; icon even when I&amp;rsquo;m no where near the edge of a window&lt;/li>
+&lt;li>The window asking for my password doesn&amp;rsquo;t pop to the front of the Settings window when I change a setting, making it appear as if Settings is not responding&lt;/li>
+&lt;li>Universal Control is not straight forward to setup&lt;/li>
+&lt;li>USB-A ports on the back loses power/connectivity after sleeping occasionally (Reports of it &lt;a href="https://discussions.apple.com/thread/253514345?answerId=256577222022#256577222022">here&lt;/a> and &lt;a href="https://forums.macrumors.com/threads/mac-mini-m1-usb-ports-not-working-after-wake-from-sleep.2326616/?post=32549313#post-32549313">here&lt;/a>)&lt;/li>
+&lt;li>Often unable to eject external drives and have to resort to logging out or restarting, even with spotlight indexing turned of for said drive&lt;/li>
+&lt;li>Not entering sleep mode normally, constantly has wakeup power events scheduled automatically and repeatedly, which I am guessing is related to the loss of power in the USB-A ports. (Reports of it &lt;a href="https://discussions.apple.com/thread/254333766?page=4">here&lt;/a> and &lt;a href="https://forums.macrumors.com/threads/macos-ventura-13-1-power-events-cause-wakeup-from-sleep.2373692/">here&lt;/a>)&lt;/li>
+&lt;/ul>
+&lt;h3 id="hardware-fail-there-may-be-an-issue-with-a-memory-module" >
+&lt;div>
+&lt;a href="#hardware-fail-there-may-be-an-issue-with-a-memory-module">
+##
+&lt;/a>
+Hardware fail: &amp;ldquo;There may be an issue with a memory module.&amp;rdquo;
+&lt;/div>
+&lt;/h3>
+&lt;p>After about two days of setting up and manually migrating files over, the Mac Mini started acting really weird with around 50+ logged crash reports in Console, especially with Electron apps. Then Firefox started crashing repeatedly and on came reboot loops with the &amp;ldquo;pink screen of death&amp;rdquo;.&lt;/p>
+&lt;p>This was it I thought, I bought a second-hand dud. Something must be wrong hardware-wise. I went ahead with an Apple Diagnostic scan &lt;em>(long press power button to enter recovery mode and then press and hold cmd+D)&lt;/em> and lo and behold; there was a memory failure (reference code: PPM001).&lt;/p>
+&lt;img src="https://www.burgeonlab.com/2023/sudden-influx-of-new-gear/memfail_m1.webp" alt="Mac Mini M1 Diagnostic Scan">
+&lt;p>I felt silly for not doing this hardware test earlier, before I started setting up all my apps and preferences, troubleshooting through all the weird quirks of Apple Silicon. I brought the Mini straight to the Genius Bar where they said the logic board along with the I/O wall will need to be replaced and will take at least five to seven days.&lt;/p>
+&lt;h2 id="cant-retire-yet" >
+&lt;div>
+&lt;a href="#cant-retire-yet">
+#
+&lt;/a>
+Can&amp;rsquo;t retire yet
+&lt;/div>
+&lt;/h2>
+&lt;p>So today, I am back writing this post on my trusty MacBook Air. My original plan, after getting the Mini all setup, was to replace the battery and SSD on the Air so it could get a new lease of life. I could test out some linux distros on it, maybe try running Docker, or dedicate it for some side project/experimentation&amp;hellip; I think these might have to wait a bit until I get the Mini running smoothly as my daily driver.&lt;/p>
+&lt;p>I have already bought a nice set of screwdriver bits containing the the Pentalobe 0.8 and 1.2, thermal paste (Arctic MX-4) and a specific SATA M.2 SSD adapter to do the upgrades soon. I will purchase a replacement battery and a SSD nearer the date of upgrade. I&amp;rsquo;m currently considering these SATA M.2 drives:&lt;/p>
+&lt;ul>
+&lt;li>Micron 1300 1TB&lt;/li>
+&lt;li>Micron M600 512GB&lt;/li>
+&lt;li>Crucial MX500 1TB&lt;/li>
+&lt;li>Samsung PM871 512GB&lt;/li>
+&lt;/ul>
+&lt;p>I will share which SSD I end up choosing and how to the upgrades go. But to check out the new screwdriver, I took off the bottom cover of the MacBook Air and cleaned out &lt;em>11-year-old dust&lt;/em>! It runs around 5 to 10 °C lower now compared to before cleaning it. I&amp;rsquo;ll replace the thermal paste when I do the memory / battery upgrade. I can&amp;rsquo;t risk losing my daily driver!&lt;/p>
+&lt;p>
+&lt;img src="https://www.burgeonlab.com/2023/sudden-influx-of-new-gear/dust_before.webp" alt="11 year old crud">
+&lt;img src="https://www.burgeonlab.com/2023/sudden-influx-of-new-gear/dust_after.webp" alt="After cleaning my 2012 MacBook Air">
+&lt;/p>
+&lt;h2 id="new-raspberry-pi-5" >
+&lt;div>
+&lt;a href="#new-raspberry-pi-5">
+#
+&lt;/a>
+New Raspberry Pi 5
+&lt;/div>
+&lt;/h2>
+&lt;p>Just as I was going to upload this post, I found out the new Pi 5 is coming next month. It is such a bummer that I got mine literally two weeks ago. It is even at the same price but the speed of almost everything is many times faster, not to mention, it has a PCIe slot. Oh well&amp;hellip; I already bought a dual fan attachment, which has arrived earlier this week.&lt;/p>
+&lt;img src="https://www.burgeonlab.com/2023/sudden-influx-of-new-gear/rpi_dual_fan.webp" alt="Yurobot dual fan attachment with LED for the Raspberry Pi 4B">
+&lt;p>I decided the distro to install is &lt;a href="https://dietpi.com/">DietPi&lt;/a>. Will be seeing if I can boot it from an external SSD (Samsung 870 EVO 512GB SATA SSD) in a USB UGREEN enclosure and start my homelabbing journey!&lt;/p></description></item><item><title>Hello, Hugo</title><link>/2023/hello-hugo/</link><pubDate>Mon, 18 Sep 2023 20:08:15 +0800</pubDate><guid>/2023/hello-hugo/</guid><description>&lt;p>Having grown up with Xanga, LiveJournal, Wordpress.com and Tumblr, then graduating to self-hosting Wordpress; using Hugo is a breath of fresh air in my blogging journey.&lt;/p>
+&lt;h2 id="learning-new-things" >
+&lt;div>
+&lt;a href="#learning-new-things">
+#
+&lt;/a>
+Learning new things
+&lt;/div>
+&lt;/h2>
+&lt;p>In late 2023, I have been trying to wrap my head around GitHub and being more competent with CLI. At the same time, I learnt to customize the macOS terminal with &lt;a href="https://ohmyz.sh/">OMZ&lt;/a> and &lt;a href="https://github.com/romkatv/powerlevel10k">PowerLevel10k&lt;/a>, using nano to edit files, using &lt;a href="https://www.ssh.com/academy/ssh">SSH&lt;/a> with keys and &lt;a href="https://www.digitalocean.com/community/tutorials/how-to-use-rsync-to-sync-local-and-remote-directories">rsync&lt;/a>.&lt;/p>
+&lt;h3 id="my-current-setup" >
+&lt;div>
+&lt;a href="#my-current-setup">
+##
+&lt;/a>
+My current setup
+&lt;/div>
+&lt;/h3>
+&lt;ul>
+&lt;li>MacBook Air 13&amp;quot; (mid-2012) 2GHz Dual-Core i7, 8GB DDR3, 512GB running Catalina (10.15) in clamshell mode &lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>&lt;/li>
+&lt;li>OWLab Spring keyboard (my first Alice layout) with KTT Wine Red Linear Switches (44g actuation, 50g bottom out)&lt;/li>
+&lt;li>BenQ Zowie EC1-B mouse&lt;/li>
+&lt;li>Dell 24&amp;quot; U2415 60Hz display&lt;/li>
+&lt;/ul>
+&lt;p>Coming from someone without any coding background, I have to admit some of what I am learning are hard to grasp. But being a lifetime learner I am determined to get my projects executed!&lt;/p>
+&lt;h3 id="experimentation-with-linux" >
+&lt;div>
+&lt;a href="#experimentation-with-linux">
+##
+&lt;/a>
+Experimentation with Linux
+&lt;/div>
+&lt;/h3>
+&lt;p>My motivation to learn these new skills comes from the fact I want to setup a &lt;strong>homelab&lt;/strong> with a Raspberry Pi 4B 8GB rev 9 (which I have &lt;em>finally&lt;/em> acquired at retail price after the restock surge in Q3/Q4 2023).&lt;/p>
+&lt;p>During the time I was waiting for the restock, I have been messing around with Linux on two old PCs from the early 2010s; a HP Slimline desktop with stock Debian 12 bookworm and a HP Mini 210-1100 netbook with the super lightweight Debian-based distro — &lt;a href="https://antixlinux.com/">antiX&lt;/a>.&lt;/p>
+&lt;p>I learnt how to use Gparted, configure basic network configs and how window managers worked. In the end, I was able to successfully self-host Navidrome and it was exhilarating to say the least!&lt;/p>
+&lt;h3 id="raspberry-pi" >
+&lt;div>
+&lt;a href="#raspberry-pi">
+##
+&lt;/a>
+Raspberry Pi
+&lt;/div>
+&lt;/h3>
+&lt;img src="https://www.burgeonlab.com/2023/hello-hugo/hello-hugo-cover.webp" alt="Raspberry Pi 1 Model B in acrylic case">
+&lt;p>During this new-found fascination with Linux, I unboxed a brand new &lt;strong>&lt;a href="https://www.raspberrypi.com/news/model-b-now-ships-with-512mb-of-ram/">Raspberry Pi Model B Rev 2 (512MB ram)&lt;/a>&lt;/strong> I bought 11 years ago in 2012! I found it earlier this month while unpacking old moving boxes I have in storage. It is running headless with the latest Raspberry Pi Lite in 32-bit. I installed Pi-Hole, feeling quite pleased with how it turned out! It is indeed a great first project for those starting out with the Raspberry Pi. The guides online were plentiful and relatively straightforward. SSH connection is via my MacBook Air or iPad Mini 6 with &lt;a href="https://secureshellfish.app/">Secure ShellFish&lt;/a>.&lt;/p>
+&lt;h2 id="creating-a-place-to-log-my-technical-trek" >
+&lt;div>
+&lt;a href="#creating-a-place-to-log-my-technical-trek">
+#
+&lt;/a>
+Creating a place to log my &amp;ldquo;technical trek&amp;rdquo;
+&lt;/div>
+&lt;/h2>
+&lt;h2 id="choosing-a-static-site-generator-as-my-content-management-system-cms" >
+&lt;div>
+&lt;a href="#choosing-a-static-site-generator-as-my-content-management-system-cms">
+#
+&lt;/a>
+Choosing a Static Site Generator as my Content Management System (CMS)
+&lt;/div>
+&lt;/h2>
+&lt;p>Having some experience with &lt;a href="https://www.markdownguide.org/cheat-sheet/">Markdown&lt;/a> while using &lt;a href="https://obsidian.md/">Obsidian&lt;/a> (my choice of PKM which I highly recommend) and back in my college days with &lt;a href="https://apps.apple.com/al/app/mou-markdown-editor/id1308265497">Mou&lt;/a> and &lt;a href="https://brettterpstra.com/projects/nvalt/">Nvalt&lt;/a> for note taking — I think it is only wise to write in .md for this second blog I&amp;rsquo;m starting. (You can find me under my main handle &lt;a href="https://www.eclecticpassions.net">@eclecticpassions&lt;/a>).&lt;/p>
+&lt;p>Writing in the Wordpress web interface is quite finicky&amp;hellip; I am not a fan. Trying to optimize the webpage load times is also a hassle. Recently, I discovered webrings dedicated to lightweight webpages, e.g. &lt;a href="https://250kb.club">250kb.club&lt;/a>, &lt;a href="https://512kb.club">512kb.club&lt;/a> and &lt;a href="https://1mb.club">1mb.club&lt;/a>.&lt;/p>
+&lt;p>These fast, content-focused blogs piqued my interests greatly. I realized most of the sites listed are static websites, using SSGs like Jekyll or Hugo. I also recall some of my Mastodon friends have mentioned it before. Hence, I bought a new domain name on &lt;a href="https://porkbun.com/">Porkbun&lt;/a> (first time customer, liking it so far), installed &lt;a href="https://gohugo.io/">Hugo&lt;/a> (seems to be quite popular and one of the fastest SSGs around), chose a theme (&lt;a href="https://github.com/lxndrblz/anatole">Anatole&lt;/a>) and deployed it with &lt;a href="https://pages.github.com/">GitHub Pages&lt;/a>.&lt;/p>
+&lt;h3 id="choice-of-domain-name" >
+&lt;div>
+&lt;a href="#choice-of-domain-name">
+##
+&lt;/a>
+Choice of domain name
+&lt;/div>
+&lt;/h3>
+&lt;p>It took me a day to think of a suitable name but I am quite happy with it. I think &amp;ldquo;Burgeon Lab&amp;rdquo; suits my use case quite well.&lt;/p>
+&lt;blockquote>
+&lt;p>Burgeon (&lt;em>verb&lt;/em>) — Begin to grow or increase rapidly; flourish.&lt;/p>&lt;/blockquote>
+&lt;p>I will treat it as a place where I can document my side projects and share my progress.&lt;/p>
+&lt;h3 id="setting-up-github-actions" >
+&lt;div>
+&lt;a href="#setting-up-github-actions">
+##
+&lt;/a>
+Setting up GitHub Actions
+&lt;/div>
+&lt;/h3>
+&lt;p>Being able to run a local instance of my Hugo site was relatively straightforward, but I had quite a bit of troubleshooting headaches before I got the Hugo directory working on my GitHub Pages repo. Will post a tutorial on it soon.&lt;/p>
+&lt;h2 id="first-two-projects" >
+&lt;div>
+&lt;a href="#first-two-projects">
+#
+&lt;/a>
+First two projects
+&lt;/div>
+&lt;/h2>
+&lt;p>To start off, I will be documenting these two topics:&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>Setting up and using Hugo as a beginner coming from Wordpress&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Setting up self-hosted services on my Raspberry Pi 4B with &lt;a href="https://www.docker.com/get-started/">Docker&lt;/a> and &lt;a href="https://www.portainer.io/">Portainer&lt;/a>, acting as my first ever homelab server&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>Thanks for reading, if you intend to follow along, please feel free to follow my RSS feed or follow me on &lt;a href="https://fosstodon.org/@eclecticpassions">Mastodon&lt;/a> where I will be post updates.&lt;/p>
+&lt;div class="footnotes" role="doc-endnotes">
+&lt;hr>
+&lt;ol>
+&lt;li id="fn:1">
+&lt;p>My beloved MBA from 2012 is still running strong! I am just waiting for the 3nm Apple silicon chips to be released, planning to get either the 14&amp;quot; or 16&amp;quot; MacBook Pro. But with possible rumours of it being delayed, I am considering getting a M1 or M2 Mac Mini with 16GB ram in the meantime (if I can find one in the second-hand market).&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/div></description></item></channel></rss>
