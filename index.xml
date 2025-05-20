@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Home on Burgeon Lab</title><link>/</link><description>Burgeon Lab (Home)</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Tue, 22 Apr 2025 19:52:16 +0800</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Using GitHub Actions to Automate Hugo Static Site Deployment to GitHub Pages</title><link>/2025/using-github-actions-to-automate-hugo-static-site-deployment-to-github-pages/</link><pubDate>Tue, 22 Apr 2025 19:52:16 +0800</pubDate><guid>/2025/using-github-actions-to-automate-hugo-static-site-deployment-to-github-pages/</guid><description>&lt;h2 id="preface" >
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Home on Burgeon Lab</title><link>https://www.burgeonlab.com/</link><description>Burgeon Lab (Home)</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Tue, 22 Apr 2025 19:52:16 +0800</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Using GitHub Actions to Automate Hugo Static Site Deployment to GitHub Pages</title><link>https://www.burgeonlab.com/2025/using-github-actions-to-automate-hugo-static-site-deployment-to-github-pages/</link><pubDate>Tue, 22 Apr 2025 19:52:16 +0800</pubDate><guid>https://www.burgeonlab.com/2025/using-github-actions-to-automate-hugo-static-site-deployment-to-github-pages/</guid><description>&lt;h2 id="preface" >
 &lt;div>
 &lt;a href="#preface">
 #
@@ -198,7 +198,7 @@ Advanced Trigger
 &lt;p>My Hugo blog folder structure is: &lt;code>blog_name/content/posts/2025/post_identifier/index.md&lt;/code>.&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
-&lt;/div></description></item><item><title>Hardening my New Android Phone</title><link>/2025/hardening-my-new-android-phone/</link><pubDate>Sun, 06 Apr 2025 22:20:14 +0800</pubDate><guid>/2025/hardening-my-new-android-phone/</guid><description>&lt;h2 id="new-phone--opportunity-to-start-afresh" >
+&lt;/div></description></item><item><title>Hardening my New Android Phone</title><link>https://www.burgeonlab.com/2025/hardening-my-new-android-phone/</link><pubDate>Sun, 06 Apr 2025 22:20:14 +0800</pubDate><guid>https://www.burgeonlab.com/2025/hardening-my-new-android-phone/</guid><description>&lt;h2 id="new-phone--opportunity-to-start-afresh" >
 &lt;div>
 &lt;a href="#new-phone--opportunity-to-start-afresh">
 #
@@ -623,7 +623,7 @@ Linking a Google Account to Your Android
 &lt;p>I have been using Nova Launcher since the beginning of my Android journey; but in 2018, they were &lt;a href="https://www.androidpolice.com/nova-launcher-acquired-by-branch/">acquired&lt;/a> by Branch, an analytics company. Since then, I&amp;rsquo;ve found a similar alternative called &lt;a href="https://pearlauncher.github.io/privacy.html">Pear Launcher&lt;/a> which seems to be privacy-respecting (although not listed as open-source) and requires no internet access permission, which is great. I&amp;rsquo;ve purchased the Pro version to support them.&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
-&lt;/div></description></item><item><title>SSH into KOreader (Kobo eReader) from macOS</title><link>/2024/ssh-into-koreader-kobo-ereader-from-macos/</link><pubDate>Thu, 22 Aug 2024 17:43:11 +0800</pubDate><guid>/2024/ssh-into-koreader-kobo-ereader-from-macos/</guid><description>&lt;h2 id="background" >
+&lt;/div></description></item><item><title>SSH into KOreader (Kobo eReader) from macOS</title><link>https://www.burgeonlab.com/2024/ssh-into-koreader-kobo-ereader-from-macos/</link><pubDate>Thu, 22 Aug 2024 17:43:11 +0800</pubDate><guid>https://www.burgeonlab.com/2024/ssh-into-koreader-kobo-ereader-from-macos/</guid><description>&lt;h2 id="background" >
 &lt;div>
 &lt;a href="#background">
 #
@@ -735,7 +735,7 @@ Fix
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> source=&lt;span style="color:#0086d2">&amp;#34;/Users/JohnDoe/Documents/KoboKOReader/&amp;#34;&lt;/span>, &lt;span style="color:#080;background-color:#0f140f;font-style:italic">-- Files in this directory will be copied over to the target destination whenever lsycnd is running, ctrl+c to end process&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> target=&lt;span style="color:#0086d2">&amp;#34;/mnt/onboard/destination_folder_name&amp;#34;&lt;/span>, &lt;span style="color:#080;background-color:#0f140f;font-style:italic">-- Files from source directory (above) will be copied over to this target destination&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Hope this helps! Happy reading with KOReader.&lt;/p></description></item><item><title>Fixing TOC Anchor Links Behind Top Navigation Header in Hugo</title><link>/2024/fixing-toc-anchor-links-behind-top-navigation-header-in-hugo/</link><pubDate>Fri, 05 Apr 2024 11:51:56 +0800</pubDate><guid>/2024/fixing-toc-anchor-links-behind-top-navigation-header-in-hugo/</guid><description>&lt;h2 id="the-problem-at-hand" >
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Hope this helps! Happy reading with KOReader.&lt;/p></description></item><item><title>Fixing TOC Anchor Links Behind Top Navigation Header in Hugo</title><link>https://www.burgeonlab.com/2024/fixing-toc-anchor-links-behind-top-navigation-header-in-hugo/</link><pubDate>Fri, 05 Apr 2024 11:51:56 +0800</pubDate><guid>https://www.burgeonlab.com/2024/fixing-toc-anchor-links-behind-top-navigation-header-in-hugo/</guid><description>&lt;h2 id="the-problem-at-hand" >
 &lt;div>
 &lt;a href="#the-problem-at-hand">
 #
@@ -790,7 +790,7 @@ A Slightly More Sophisticated Fix
 &lt;p>&lt;a href="https://getpublii.com/blog/one-line-css-solution-to-prevent-anchor-links-from-scrolling-behind-a-sticky-header.html">https://getpublii.com/blog/one-line-css-solution-to-prevent-anchor-links-from-scrolling-behind-a-sticky-header.html&lt;/a>&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
-&lt;/div></description></item><item><title>Customizing Neofetch: Load Weather Data Faster</title><link>/2024/customizing-neofetch-load-weather-data-faster/</link><pubDate>Sat, 30 Mar 2024 14:34:25 +0800</pubDate><guid>/2024/customizing-neofetch-load-weather-data-faster/</guid><description>&lt;h2 id="my-terminal-setup" >
+&lt;/div></description></item><item><title>Customizing Neofetch: Load Weather Data Faster</title><link>https://www.burgeonlab.com/2024/customizing-neofetch-load-weather-data-faster/</link><pubDate>Sat, 30 Mar 2024 14:34:25 +0800</pubDate><guid>https://www.burgeonlab.com/2024/customizing-neofetch-load-weather-data-faster/</guid><description>&lt;h2 id="my-terminal-setup" >
 &lt;div>
 &lt;a href="#my-terminal-setup">
 #
@@ -1739,7 +1739,7 @@ neofetch/config.conf
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#080;background-color:#0f140f;font-style:italic"># Default: &amp;#39;off&amp;#39;&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#080;background-color:#0f140f;font-style:italic"># Values: &amp;#39;on&amp;#39;, &amp;#39;off&amp;#39;&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#fb660a">stdout&lt;/span>=&lt;span style="color:#0086d2">&amp;#34;off&amp;#34;&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Mac Mini M1 Problems</title><link>/2023/mac-mini-m1-problems/</link><pubDate>Wed, 13 Dec 2023 12:09:15 +0800</pubDate><guid>/2023/mac-mini-m1-problems/</guid><description>&lt;h2 id="troubleshooting-notes" >
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Mac Mini M1 Problems</title><link>https://www.burgeonlab.com/2023/mac-mini-m1-problems/</link><pubDate>Wed, 13 Dec 2023 12:09:15 +0800</pubDate><guid>https://www.burgeonlab.com/2023/mac-mini-m1-problems/</guid><description>&lt;h2 id="troubleshooting-notes" >
 &lt;div>
 &lt;a href="#troubleshooting-notes">
 #
@@ -1849,7 +1849,7 @@ Error: &amp;ldquo;The App is Damaged and Can not be Opened on Mac&amp;rdquo;
 &lt;p>I have the ACASIS TBU405PROM1 with Samsung 980 Pro 2TB partitioned into two volumes; one for Time Machine, the other for general purpose.&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
-&lt;/div></description></item><item><title>Adding a simple "scroll to the top" button to your Hugo site</title><link>/2023/adding-a-simple-scroll-to-the-top-button-to-your-hugo-site/</link><pubDate>Sat, 21 Oct 2023 10:58:31 +0800</pubDate><guid>/2023/adding-a-simple-scroll-to-the-top-button-to-your-hugo-site/</guid><description>&lt;h2 id="using-just-html-and-css" >
+&lt;/div></description></item><item><title>Adding a simple "scroll to the top" button to your Hugo site</title><link>https://www.burgeonlab.com/2023/adding-a-simple-scroll-to-the-top-button-to-your-hugo-site/</link><pubDate>Sat, 21 Oct 2023 10:58:31 +0800</pubDate><guid>https://www.burgeonlab.com/2023/adding-a-simple-scroll-to-the-top-button-to-your-hugo-site/</guid><description>&lt;h2 id="using-just-html-and-css" >
 &lt;div>
 &lt;a href="#using-just-html-and-css">
 #
@@ -1933,7 +1933,7 @@ Result
 &lt;p>&lt;a href="https://secluded.site/adding-a-better-scroll-to-top-button-without-javascript/">https://secluded.site/adding-a-better-scroll-to-top-button-without-javascript/&lt;/a>&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
-&lt;/div></description></item><item><title>Booting DietPi from SSD on a Raspberry Pi 4B 8GB</title><link>/2023/booting-dietpi-from-ssd-on-a-raspberry-pi-4b-8gb/</link><pubDate>Sun, 01 Oct 2023 20:35:10 +0800</pubDate><guid>/2023/booting-dietpi-from-ssd-on-a-raspberry-pi-4b-8gb/</guid><description>&lt;h2 id="setting-up-dietpi-on-a-headless-raspberry-pi-4b-8gb" >
+&lt;/div></description></item><item><title>Booting DietPi from SSD on a Raspberry Pi 4B 8GB</title><link>https://www.burgeonlab.com/2023/booting-dietpi-from-ssd-on-a-raspberry-pi-4b-8gb/</link><pubDate>Sun, 01 Oct 2023 20:35:10 +0800</pubDate><guid>https://www.burgeonlab.com/2023/booting-dietpi-from-ssd-on-a-raspberry-pi-4b-8gb/</guid><description>&lt;h2 id="setting-up-dietpi-on-a-headless-raspberry-pi-4b-8gb" >
 &lt;div>
 &lt;a href="#setting-up-dietpi-on-a-headless-raspberry-pi-4b-8gb">
 #
@@ -2012,7 +2012,7 @@ Installing software
 &lt;p>I bought the metal case variant UGREEN 2.5&amp;quot; SATA Enclosure, with the phrase &amp;ldquo;Protect What You Love!&amp;rdquo; laser etched on the bottom right corner of the top plate. The USB cable is a Micro B to USB-A 3.0. There&amp;rsquo;s more info from &lt;a href="https://jamesachambers.com/best-ssd-storage-adapters-for-raspberry-pi-4-400/">James Chamber&amp;rsquo;s page&lt;/a> on what external drives works well with the Raspberry Pi.&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
-&lt;/div></description></item><item><title>Sudden Influx of New Gear</title><link>/2023/sudden-influx-of-new-gear/</link><pubDate>Thu, 28 Sep 2023 19:05:34 +0800</pubDate><guid>/2023/sudden-influx-of-new-gear/</guid><description>&lt;p>Having gone on a deep dive in the mid of September learning about Hugo and Git for documenting my Raspberry Pi 4B homelab journey; I found myself suddenly distracted by a great deal on a Mac Mini M1 in the local second-hand market.&lt;/p>
+&lt;/div></description></item><item><title>Sudden Influx of New Gear</title><link>https://www.burgeonlab.com/2023/sudden-influx-of-new-gear/</link><pubDate>Thu, 28 Sep 2023 19:05:34 +0800</pubDate><guid>https://www.burgeonlab.com/2023/sudden-influx-of-new-gear/</guid><description>&lt;p>Having gone on a deep dive in the mid of September learning about Hugo and Git for documenting my Raspberry Pi 4B homelab journey; I found myself suddenly distracted by a great deal on a Mac Mini M1 in the local second-hand market.&lt;/p>
 &lt;img src="https://www.burgeonlab.com/2023/sudden-influx-of-new-gear/macmini_geniusbar.webp" alt="At the Apple Genius Bar">
 &lt;h2 id="retiring-my-trusty-daily-driver" >
 &lt;div>
@@ -2087,7 +2087,7 @@ New Raspberry Pi 5
 &lt;/h2>
 &lt;p>Just as I was going to upload this post, I found out the new Pi 5 is coming next month. It is such a bummer that I got mine literally two weeks ago. It is even at the same price but the speed of almost everything is many times faster, not to mention, it has a PCIe slot. Oh well&amp;hellip; I already bought a dual fan attachment, which has arrived earlier this week.&lt;/p>
 &lt;img src="https://www.burgeonlab.com/2023/sudden-influx-of-new-gear/rpi_dual_fan.webp" alt="Yurobot dual fan attachment with LED for the Raspberry Pi 4B">
-&lt;p>I decided the distro to install is &lt;a href="https://dietpi.com/">DietPi&lt;/a>. Will be seeing if I can boot it from an external SSD (Samsung 870 EVO 512GB SATA SSD) in a USB UGREEN enclosure and start my homelabbing journey!&lt;/p></description></item><item><title>Hello, Hugo</title><link>/2023/hello-hugo/</link><pubDate>Mon, 18 Sep 2023 20:08:15 +0800</pubDate><guid>/2023/hello-hugo/</guid><description>&lt;p>Having grown up with Xanga, LiveJournal, Wordpress.com and Tumblr, then graduating to self-hosting Wordpress; using Hugo is a breath of fresh air in my blogging journey.&lt;/p>
+&lt;p>I decided the distro to install is &lt;a href="https://dietpi.com/">DietPi&lt;/a>. Will be seeing if I can boot it from an external SSD (Samsung 870 EVO 512GB SATA SSD) in a USB UGREEN enclosure and start my homelabbing journey!&lt;/p></description></item><item><title>Hello, Hugo</title><link>https://www.burgeonlab.com/2023/hello-hugo/</link><pubDate>Mon, 18 Sep 2023 20:08:15 +0800</pubDate><guid>https://www.burgeonlab.com/2023/hello-hugo/</guid><description>&lt;p>Having grown up with Xanga, LiveJournal, Wordpress.com and Tumblr, then graduating to self-hosting Wordpress; using Hugo is a breath of fresh air in my blogging journey.&lt;/p>
 &lt;h2 id="learning-new-things" >
 &lt;div>
 &lt;a href="#learning-new-things">
@@ -2199,7 +2199,7 @@ First two projects
 &lt;p>My beloved MBA from 2012 is still running strong! I am just waiting for the 3nm Apple silicon chips to be released, planning to get either the 14&amp;quot; or 16&amp;quot; MacBook Pro. But with possible rumours of it being delayed, I am considering getting a M1 or M2 Mac Mini with 16GB ram in the meantime (if I can find one in the second-hand market).&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
-&lt;/div></description></item><item><title>Welcome To My Lab</title><link>/about/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/about/</guid><description>&lt;p>Hi there,&lt;/p>
+&lt;/div></description></item><item><title>Welcome To My Lab</title><link>https://www.burgeonlab.com/about/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://www.burgeonlab.com/about/</guid><description>&lt;p>Hi there,&lt;/p>
 &lt;p>I&amp;rsquo;m Naty 👋🏻&lt;/p>
 &lt;p>I created this site for tech-related topics I have learnt or passionate about, sharing relevant technical notes for those who might be starting a similar project or troubleshooting through the same errors.&lt;/p>
 &lt;p>So follow me, as I learn how to build a home lab / self hosted home server with a Raspberry Pi, whilst documenting this journey with my newly learnt skills of using a command-line interface, Hugo and GitHub/Git. Other topics of interest are: Android, FOSS, macOS and online privacy.&lt;/p>
