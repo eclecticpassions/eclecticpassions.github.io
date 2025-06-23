@@ -1,1 +1,0 @@
-"use strict";document.addEventListener("DOMContentLoaded",function(){const e=document.getElementById("link-conversion");e?e.setAttribute("href",e.getAttribute("href").replace("cont","ecticpas").replace("-","ty@ecl").replace("act","sions.net").replace("to","mailto:na")):console.warn('Element with id="link-conversion" not found.')})
