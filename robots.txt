@@ -13,28 +13,49 @@ Disallow:
 User-agent: Baiduspider
 Disallow:
 
-User-agent: Meta-ExternalAgent
-Disallow: /
+User-agent: PerplexityBot
+Disallow:
 
-User-agent: omgili
-Disallow: /
+User-agent: Claude-User
+Disallow:
 
-User-agent: img2dataset
-Disallow: /
+User-agent: ChatGPT-User
+Disallow:
+
+User-agent: Gemini-User
+Disallow:
+
+User-agent: Google-Extended
+Disallow:
+
+User-agent: DuckDuckBot
+Disallow:
 
 User-agent: GPTBot
 Disallow: /
 
-User-agent: ChatGPT-User
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: BingPreview
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
+User-agent: Meta-ExternalAgent
 Disallow: /
 
 User-agent: anthropic-ai
 Disallow: /
 
-User-agent: Google-Extended
+User-agent: omgili
 Disallow: /
 
-User-agent: PerplexityBot
+User-agent: CCBot
+Disallow: /
+
+User-agent: img2dataset
 Disallow: /
 
 User-agent: *
